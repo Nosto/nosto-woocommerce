@@ -1,4 +1,1 @@
-nosto-woocommerce-extension
-===========================
-
-Nosto WooCommerce extension
+# WooCommerce Nosto Tagging
