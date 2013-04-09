@@ -129,7 +129,9 @@ class WC_Nosto_Tagging
 	 * @since 1.0.0
 	 */
 	public function init() {
-
+		if ( is_admin() ) {
+			$this->init_admin();
+		}
 	}
 
 	/**
@@ -166,6 +168,41 @@ class WC_Nosto_Tagging
 	 */
 	public function uninstall() {
 
+	}
+
+	/**
+	 * Getter for the plugin base name.
+	 *
+	 * @since 1.0.0
+	 * @return string
+	 */
+	public function get_plugin_name() {
+		return $this->plugin_name;
+	}
+
+	/**
+	 * Initializes the plugin admin part.
+	 *
+	 * Adds a new integration into the WooCommerce settings structure.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function init_admin() {
+		$this->load_class( 'WC_Integration_Nosto_Tagging' );
+		add_filter( 'woocommerce_integrations', array( 'WC_Integration_Nosto_Tagging', 'add_integration' ) );
+	}
+
+	/**
+	 * Load class file based on class name.
+	 *
+	 * The file are expected to be located in the plugin "classes" directory.
+	 *
+	 * @since 1.0.0
+	 * @param string $class_name The name of the class to load
+	 */
+	protected function load_class( $class_name = '' ) {
+		$file = 'class-' . strtolower( str_replace( '_', '-', $class_name ) ) . '.php';
+		require_once( $this->plugin_dir . 'classes/' . $file );
 	}
 
 	/**
