@@ -57,6 +57,22 @@ class WC_Nosto_Tagging
 	const MIN_WC_VERSION = '2.0.0';
 
 	/**
+	 * Value for marking a product that is in stock.
+	 * Used in product tagging.
+	 *
+	 * @since 1.0.0
+	 */
+	const PRODUCT_IN_STOCK = 'InStock';
+
+	/**
+	 * Value for marking a product that is not in stock.
+	 * Used in product tagging.
+	 *
+	 * @since 1.0.0
+	 */
+	const PRODUCT_OUT_OF_STOCK = 'OutOfStock';
+
+	/**
 	 * The working instance of the plugin.
 	 *
 	 * @since 1.0.0
@@ -87,6 +103,33 @@ class WC_Nosto_Tagging
 	 * @var string
 	 */
 	protected $plugin_name = '';
+
+	/**
+	 * The Nosto server address.
+	 * This is a setting configured on the admin page.
+	 *
+	 * @since 1.0.0
+	 * @var string
+	 */
+	protected $server_address = '';
+
+	/**
+	 * The Nosto account name.
+	 * This is a setting configured on the admin page.
+	 *
+	 * @since 1.0.0
+	 * @var string
+	 */
+	protected $account_name = '';
+
+	/**
+	 * If the default Nosto elements should be outputted.
+	 * This is a setting configured on the admin page.
+	 *
+	 * @since 1.0.0
+	 * @var string
+	 */
+	protected $use_default_elements = '';
 
 	/**
 	 * Gets the working instance of the plugin.
@@ -131,6 +174,8 @@ class WC_Nosto_Tagging
 	public function init() {
 		if ( is_admin() ) {
 			$this->init_admin();
+		} else {
+			$this->init_frontend();
 		}
 	}
 
@@ -167,7 +212,7 @@ class WC_Nosto_Tagging
 	 * @since 1.0.0
 	 */
 	public function uninstall() {
-
+		delete_option( 'woocommerce_nosto_tagging_settings' );
 	}
 
 	/**
@@ -181,6 +226,368 @@ class WC_Nosto_Tagging
 	}
 
 	/**
+	 * Hook callback function for tagging products.
+	 *
+	 * Gathers necessary data and renders the product tagging template ( templates/product-tagging.php ).
+	 *
+	 * @since 1.0.0
+	 */
+	public function tag_product() {
+		if ( is_product() ) {
+			/** @var $product WC_Product */
+			global $product;
+
+			if ( $product instanceof WC_Product ) {
+				$data       = array();
+				$product_id = (int) $product->id;
+
+				$data['url']        = (string) get_permalink();
+				$data['product_id'] = $product_id;
+				$data['name']       = (string) $product->get_title();
+
+				$image_url = wp_get_attachment_url( get_post_thumbnail_id() );
+				if ( ! empty( $image_url ) ) {
+					$data['image_url'] = (string) $image_url;
+				}
+
+				$data['price']               = $this->format_price( $product->get_price_including_tax() );
+				$data['price_currency_code'] = get_woocommerce_currency();
+				$data['availability']        = $product->is_in_stock() ? self::PRODUCT_IN_STOCK : self::PRODUCT_OUT_OF_STOCK;
+
+				$data['categories'] = array();
+				$terms              = get_the_terms( $product->post->ID, 'product_cat' );
+				if ( is_array( $terms ) ) {
+					foreach ( $terms as $term ) {
+						$category_path = $this->build_category_path( $term );
+						if ( ! empty( $category_path ) ) {
+							$data['categories'][] = $category_path;
+						}
+					}
+				}
+
+				$data['description']    = (string) $product->post->post_content;
+				$data['list_price']     = $this->format_price( $this->get_list_price_including_tax( $product ) );
+				$data['date_published'] = (string) get_post_time( 'Y-m-d' );
+
+				if ( ! empty( $data ) ) {
+					$this->render( 'product-tagging', array( 'product' => $data ) );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Hook callback function for tagging categories.
+	 *
+	 * Gathers necessary data and renders the category tagging template ( templates/category-tagging.php ).
+	 *
+	 * @since 1.0.0
+	 */
+	public function tag_category() {
+		if ( is_product_category() ) {
+			$term          = get_term_by( 'slug', esc_attr( get_query_var( 'product_cat' ) ), 'product_cat' );
+			$category_path = $this->build_category_path( $term );
+			if ( ! empty( $category_path ) ) {
+				$this->render( 'category-tagging', array( 'category_path' => $category_path ) );
+			}
+		}
+	}
+
+	/**
+	 * Hook callback function for tagging logged in customers.
+	 *
+	 * Gathers necessary data and renders the customer tagging template ( templates/customer-tagging.php ).
+	 *
+	 * @since 1.0.0
+	 */
+	public function tag_customer() {
+		if ( is_user_logged_in() ) {
+			$user     = wp_get_current_user();
+			$customer = $this->get_customer_data( $user );
+			if ( ! empty( $customer ) ) {
+				$this->render( 'customer-tagging', array( 'customer' => $customer ) );
+			}
+		}
+	}
+
+	/**
+	 * Hook callback function for tagging cart content.
+	 *
+	 * Gathers necessary data and renders the cart tagging template ( templates/cart-tagging.php ).
+	 *
+	 * @since 1.0.0
+	 */
+	public function tag_cart() {
+		/** @var $woocommerce Woocommerce */
+		global $woocommerce;
+
+		if ( $woocommerce->cart instanceof WC_Cart && 0 < count( $woocommerce->cart->get_cart() ) ) {
+			$cart_items    = $woocommerce->cart->get_cart();
+			$currency_code = get_woocommerce_currency();
+			$line_items    = array();
+
+			foreach ( $cart_items as $cart_item ) {
+				/** @var $product WC_Product */
+				$product   = $cart_item['data'];
+				$line_item = array(
+					'product_id'          => (int) $cart_item['product_id'],
+					'quantity'            => (int) $cart_item['quantity'],
+					'name'                => (string) $product->get_title(),
+					'unit_price'          => $this->format_price( $product->get_price_including_tax() ),
+					'price_currency_code' => $currency_code,
+				);
+
+				$line_items[] = $line_item;
+			}
+
+			if ( ! empty( $line_items ) ) {
+				$this->render( 'cart-tagging', array( 'line_items' => $line_items ) );
+			}
+		}
+	}
+
+	/**
+	 * Hook callback function for tagging successful orders.
+	 *
+	 * Gathers necessary data and renders the order tagging template ( templates/order-tagging.php ).
+	 *
+	 * @since 1.0.0
+	 * @param int $order_id The id of the placed order
+	 */
+	public function tag_order( $order_id ) {
+		if ( is_numeric( $order_id ) && 0 < $order_id ) {
+			$order = new WC_Order( $order_id );
+
+			if ( 0 < $order->user_id ) {
+				$user     = new WP_User( $order->user_id );
+				$customer = $this->get_customer_data( $user );
+			} else {
+				// Fall back on the billing address data if the user is anonymous.
+				$customer = array(
+					'first_name' => $order->billing_first_name,
+					'last_name'  => $order->billing_last_name,
+					'email'      => $order->billing_email,
+				);
+			}
+
+			$currency_code = get_woocommerce_currency();
+
+			$data = array(
+				'order_number' => $order->id,
+				'customer'     => $customer,
+				'line_items'   => array(),
+			);
+
+			foreach ( $order->get_items() as $item ) {
+				// We need to calculate the unit price manually, due to a bug in WooCommerce
+				// where the line item subtotal is calculated ( WC_Order::get_item_subtotal() ).
+				$unit_price = bcadd( $item['line_subtotal'], $item['line_subtotal_tax'], 2 );
+				if ( 1 < $item['qty'] ) {
+					$unit_price = bcdiv( $unit_price, $item['qty'], 2 );
+				}
+				$line_item = array(
+					'product_id'          => (int) $item['product_id'],
+					'quantity'            => (int) $item['qty'],
+					'name'                => (string) $item['name'],
+					'unit_price'          => $this->format_price( $unit_price ),
+					'price_currency_code' => $currency_code,
+				);
+
+				$data['line_items'][] = $line_item;
+			}
+
+			// Add special line items for discounts, shipping and "fees".
+			if ( ! empty( $data['line_items'] ) ) {
+				$discount = $order->get_total_discount();
+				if ( 0 < $discount ) {
+					$data['line_items'][] = array(
+						'product_id'          => - 1,
+						'quantity'            => 1,
+						'name'                => 'Discount',
+						'unit_price'          => $this->format_price( - $discount ),
+						'price_currency_code' => $currency_code,
+					);
+				}
+
+				$shipping = $order->get_shipping();
+				if ( 0 < $shipping ) {
+					// Shipping tax needs to be added manually.
+					if ( 0 < ( $shipping_tax = $order->get_shipping_tax() ) ) {
+						$shipping = bcadd( $shipping, $shipping_tax, 2 );
+					}
+					$data['line_items'][] = array(
+						'product_id'          => - 1,
+						'quantity'            => 1,
+						'name'                => 'Shipping',
+						'unit_price'          => $this->format_price( $shipping ),
+						'price_currency_code' => $currency_code,
+					);
+				}
+
+				// There might be some additional fees for the order,
+				// so we just add them all to the tagging.
+				$fees = $order->get_fees();
+				if ( is_array( $fees ) ) {
+					foreach ( $fees as $fee ) {
+						// The tax needs to be added manually.
+						$unit_price = bcadd( $fee['line_total'], $fee['line_tax'], 2 );
+						if ( 0 < $unit_price ) {
+							$data['line_items'][] = array(
+								'product_id'          => - 1,
+								'quantity'            => 1,
+								'name'                => isset( $fee['name'] ) ? $fee['name'] : 'Fee',
+								'unit_price'          => $this->format_price( $unit_price ),
+								'price_currency_code' => $currency_code,
+							);
+						}
+					}
+				}
+
+				$this->render( 'order-tagging', array( 'order' => $data ) );
+			}
+		}
+	}
+
+	/**
+	 * Renders a template file.
+	 *
+	 * The file is expected to be located in the plugin "templates" directory.
+	 *
+	 * @since 1.0.0
+	 * @param string $template The name of the template
+	 * @param array  $data     The data to pass to the template file
+	 */
+	public function render( $template, $data = array() ) {
+		if ( is_array( $data ) ) {
+			extract( $data );
+		}
+		$file = $template . '.php';
+		require( $this->plugin_dir . 'templates/' . $file );
+	}
+
+	/**
+	 * Get customer data for tagging for the WP_User object.
+	 *
+	 * @since 1.0.0
+	 * @param WP_User $user The user for which to get the data
+	 * @return array
+	 */
+	protected function get_customer_data( $user ) {
+		$customer = array();
+
+		if ( $user instanceof WP_User ) {
+			$customer['first_name'] = ! empty( $user->user_firstname ) ? $user->user_firstname : '';
+
+			if ( ! empty( $user->user_lastname ) ) {
+				$customer['last_name'] = $user->user_lastname;
+			} elseif ( ! empty( $user->user_login ) ) {
+				// Fallback on the users login name if there is no last name.
+				$customer['last_name'] = $user->user_login;
+			} else {
+				$customer['last_name'] = '';
+			}
+
+			$customer['email'] = ! empty( $user->user_email ) ? $user->user_email : '';
+		}
+
+		return $customer;
+	}
+
+	/**
+	 * Gets the list price including tax for the given product.
+	 *
+	 * @since 1.0.0
+	 * @param WC_Product $product The product object
+	 * @return string|int
+	 */
+	protected function get_list_price_including_tax( $product ) {
+		if ( $product instanceof WC_Product ) {
+			// Clone the object so we can modify the price properties without
+			// breaking anything. We do this in order to use the internal
+			// WooCommerce tax calculations.
+			$product_clone = clone $product;
+
+			if ( $product_clone->is_on_sale() && isset( $product_clone->regular_price ) ) {
+				$product_clone->set_price( $product_clone->regular_price );
+			}
+
+			$list_price = $product_clone->get_price_including_tax();
+		} else {
+			$list_price = 0;
+		}
+
+		return $list_price;
+	}
+
+	/**
+	 * Formats price into Nosto format, e.g. 1000.99.
+	 *
+	 * @since 1.0.0
+	 * @param string|int|float $price The price to format
+	 * @return string
+	 */
+	protected function format_price( $price ) {
+		return number_format( $price, 2, '.', '' );
+	}
+
+	/**
+	 * Builds a category path string for given term including all its parents.
+	 *
+	 * @since 1.0.0
+	 * @param object $term The term object to build the category path string from
+	 * @return string
+	 */
+	protected function build_category_path( $term ) {
+		$category_path = '';
+
+		if ( is_object( $term ) && ! empty( $term->term_id ) ) {
+			$terms   = $this->get_parent_terms( $term );
+			$terms[] = $term;
+
+			$term_names = array();
+			foreach ( $terms as $term ) {
+				$term_names[] = $term->name;
+			}
+
+			if ( ! empty( $term_names ) ) {
+				$category_path = DIRECTORY_SEPARATOR . implode( DIRECTORY_SEPARATOR, $term_names );
+			}
+		}
+
+		return $category_path;
+	}
+
+	/**
+	 * Get a list of all parent terms for given term.
+	 *
+	 * The list is sorted starting from the most distant parent.
+	 *
+	 * @since 1.0.0
+	 * @param object $term     The term object to find parent terms for
+	 * @param string $taxonomy The taxonomy type for the terms
+	 * @return array
+	 */
+	protected function get_parent_terms( $term, $taxonomy = 'product_cat' ) {
+		if ( empty( $term->parent ) ) {
+			return array();
+		}
+
+		$parent = get_term( $term->parent, $taxonomy );
+
+		if ( is_wp_error( $parent ) ) {
+			return array();
+		}
+
+		$parents = array( $parent );
+
+		if ( $parent->parent && ( $parent->parent !== $parent->term_id ) ) {
+			$parents = array_merge( $parents, $this->get_parent_terms( $parent, $taxonomy ) );
+		}
+
+		return array_reverse( $parents );
+	}
+
+	/**
 	 * Initializes the plugin admin part.
 	 *
 	 * Adds a new integration into the WooCommerce settings structure.
@@ -190,6 +597,41 @@ class WC_Nosto_Tagging
 	protected function init_admin() {
 		$this->load_class( 'WC_Integration_Nosto_Tagging' );
 		add_filter( 'woocommerce_integrations', array( 'WC_Integration_Nosto_Tagging', 'add_integration' ) );
+	}
+
+	/**
+	 * Initializes the plugin frontend part.
+	 *
+	 * Adds all hooks needed by the plugin in the frontend.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function init_frontend() {
+		$this->init_settings();
+
+		add_action( 'woocommerce_before_single_product', array( $this, 'tag_product' ), 20, 0 );
+		add_action( 'woocommerce_before_main_content', array( $this, 'tag_category' ), 30, 0 );
+		add_action( 'woocommerce_thankyou', array( $this, 'tag_order' ), 10, 1 );
+		add_action( 'wp_footer', array( $this, 'tag_customer' ), 10, 0 );
+		add_action( 'wp_footer', array( $this, 'tag_cart' ), 10, 0 );
+	}
+
+	/**
+	 * Loads the plugin settings from WP options table.
+	 *
+	 * Applies the settings as member variables to $this.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function init_settings() {
+		$settings = get_option( 'woocommerce_nosto_tagging_settings' );
+		if ( is_array( $settings ) ) {
+			foreach ( $settings as $key => $value ) {
+				if ( isset( $this->$key ) ) {
+					$this->$key = $value;
+				}
+			}
+		}
 	}
 
 	/**

@@ -28,6 +28,8 @@ class WC_Integration_Nosto_Tagging extends WC_Integration
 	 * Constructor.
 	 *
 	 * Init and hook in the integration.
+	 *
+	 * @since 1.0.0
 	 */
 	public function __construct() {
 		$this->id                 = 'nosto_tagging';
@@ -48,6 +50,8 @@ class WC_Integration_Nosto_Tagging extends WC_Integration
 	 * - server address (text)
 	 * - account name (text)
 	 * - use default Nosto element (radio; yes/no)
+	 *
+	 * @since 1.0.0
 	 */
 	function init_form_fields() {
 		$this->form_fields = array(
