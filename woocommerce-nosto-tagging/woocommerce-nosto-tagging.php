@@ -598,6 +598,25 @@ class WC_Nosto_Tagging
 	}
 
 	/**
+	 * Registers the Nosto JavaScript to be added to the page head section.
+	 *
+	 * Both the server address and the account name need to be set for the
+	 * script to be added.
+	 *
+	 * @since 1.0.0
+	 */
+	public function register_scripts() {
+		if ( ! empty( $this->server_address ) && ! empty( $this->account_name ) ) {
+			wp_enqueue_script( 'nosto-tagging-script', $this->plugin_url . 'js/embed.js' );
+			$params = array(
+				'serverAddress' => esc_js( $this->server_address ),
+				'accountName'   => esc_js( $this->account_name ),
+			);
+			wp_localize_script( 'nosto-tagging-script', 'NostoTagging', $params );
+		}
+	}
+
+	/**
 	 * Get customer data for tagging for the WP_User object.
 	 *
 	 * @since 1.0.0
@@ -740,6 +759,8 @@ class WC_Nosto_Tagging
 	 */
 	protected function init_frontend() {
 		$this->init_settings();
+
+		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
 
 		add_action( 'woocommerce_before_single_product', array( $this, 'tag_product' ), 20, 0 );
 		add_action( 'woocommerce_before_main_content', array( $this, 'tag_category' ), 30, 0 );
