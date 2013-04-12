@@ -177,6 +177,8 @@ class WC_Nosto_Tagging
 		} else {
 			$this->init_frontend();
 		}
+
+		add_action( 'widgets_init', array( $this, 'register_widgets' ) );
 	}
 
 	/**
@@ -614,6 +616,16 @@ class WC_Nosto_Tagging
 			);
 			wp_localize_script( 'nosto-tagging-script', 'NostoTagging', $params );
 		}
+	}
+
+	/**
+	 * Registers widget for showing Nosto elements in the shop sidebars.
+	 *
+	 * @since 1.0.0
+	 */
+	public function register_widgets() {
+		$this->load_class( 'WP_Widget_Nosto_Element' );
+		register_widget( 'WP_Widget_Nosto_Element' );
 	}
 
 	/**
