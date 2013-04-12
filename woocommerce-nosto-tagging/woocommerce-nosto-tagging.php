@@ -191,7 +191,15 @@ class WC_Nosto_Tagging
 	 */
 	public function activate() {
 		if ( $this->check_dependencies() ) {
-
+			$this->load_class( 'WC_Nosto_Tagging_Top_Sellers_Page' );
+			$page_id = get_option( 'woocommerce_nosto_tagging_top_sellers_page_id', null );
+			$page    = new WC_Nosto_Tagging_Top_Sellers_Page( $page_id );
+			$page->publish();
+			if ( null === $page_id ) {
+				add_option( 'woocommerce_nosto_tagging_top_sellers_page_id', $page->get_id() );
+			} else {
+				update_option( 'woocommerce_nosto_tagging_top_sellers_page_id', $page->get_id() );
+			}
 		}
 	}
 
@@ -203,7 +211,12 @@ class WC_Nosto_Tagging
 	 * @since 1.0.0
 	 */
 	public function deactivate() {
-
+		$page_id = get_option( 'woocommerce_nosto_tagging_top_sellers_page_id' );
+		if ( $page_id ) {
+			$this->load_class( 'WC_Nosto_Tagging_Top_Sellers_Page' );
+			$page = new WC_Nosto_Tagging_Top_Sellers_Page( $page_id );
+			$page->unpublish();
+		}
 	}
 
 	/**
@@ -214,7 +227,16 @@ class WC_Nosto_Tagging
 	 * @since 1.0.0
 	 */
 	public function uninstall() {
+		$page_id = get_option( 'woocommerce_nosto_tagging_top_sellers_page_id' );
+		if ( $page_id ) {
+			$this->load_class( 'WC_Nosto_Tagging_Top_Sellers_Page' );
+			$page = new WC_Nosto_Tagging_Top_Sellers_Page( $page_id );
+			$page->remove();
+		}
+
 		delete_option( 'woocommerce_nosto_tagging_settings' );
+		delete_option( 'woocommerce_nosto_tagging_top_sellers_page_id' );
+		delete_option( 'widget_nosto_element' );
 	}
 
 	/**
