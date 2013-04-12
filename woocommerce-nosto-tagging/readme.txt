@@ -76,21 +76,21 @@ link to the page should appear in the shops main navigation menu.
 The plugin uses the WordPress Action API to add content to the shop. However, there are a few actions that will have to
 be added to the shops theme in order for the plugin to function to its full extent.
 
-* wcnt_top_of_search_results
+* wcnt_before_search_result
 	* This action should be called above the search result list on the on search pages
-	* You need to add `<?php do_action('wcnt_top_of_search_results'); ?>` in your themes search page template at the
+	* You need to add `<?php do_action('wcnt_before_search_result'); ?>` in your themes search page template at the
 	appropriate location
-* wcnt_bottom_of_search_results
+* wcnt_after_search_result
 	* This action should be called below the search result list on the on search pages
-	* You need to add `<?php do_action('wcnt_bottom_of_search_results'); ?>` in your themes search page template at
+	* You need to add `<?php do_action('wcnt_after_search_result'); ?>` in your themes search page template at
 	the appropriate location
-* wcnt_top_of_pages
+* wcnt_before_main_content
 	* This action should be called at the beginning of every page in the shop
-	* You need to add `<?php do_action('wcnt_top_of_pages'); ?>` in your themes header template, inside the main
+	* You need to add `<?php do_action('wcnt_before_main_content'); ?>` in your themes header template, inside the main
 	content section
-* wcnt_bottom_of_pages
+* wcnt_after_main_content
 	* This action should be called at the end of every page in the shop
-	* You need to add `<?php do_action('wcnt_bottom_of_pages'); ?>` in your themes footer template, inside the main
+	* You need to add `<?php do_action('wcnt_after_main_content'); ?>` in your themes footer template, inside the main
 	content section
 
 Once you have activated the plugin and added the necessary actions, you need to configure the plugin. The plugins
