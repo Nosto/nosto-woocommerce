@@ -550,12 +550,14 @@ class WC_Nosto_Tagging
 	 * @since 1.0.0
 	 */
 	public function add_search_page_top_elements() {
-		$default_element_ids = array(
-			'nosto-page-search1',
-		);
-		$element_ids         = apply_filters( 'wcnt_add_search_page_top_elements', $default_element_ids );
-		if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-			$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ) );
+		if ( is_search() ) {
+			$default_element_ids = array(
+				'nosto-page-search1',
+			);
+			$element_ids         = apply_filters( 'wcnt_add_search_page_top_elements', $default_element_ids );
+			if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
+				$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ) );
+			}
 		}
 	}
 
@@ -565,12 +567,14 @@ class WC_Nosto_Tagging
 	 * @since 1.0.0
 	 */
 	public function add_search_page_bottom_elements() {
-		$default_element_ids = array(
-			'nosto-page-search2',
-		);
-		$element_ids         = apply_filters( 'wcnt_add_search_page_bottom_elements', $default_element_ids );
-		if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-			$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ) );
+		if ( is_search() ) {
+			$default_element_ids = array(
+				'nosto-page-search2',
+			);
+			$element_ids         = apply_filters( 'wcnt_add_search_page_bottom_elements', $default_element_ids );
+			if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
+				$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ) );
+			}
 		}
 	}
 
@@ -807,6 +811,8 @@ class WC_Nosto_Tagging
 			add_action( 'woocommerce_before_main_content', array( $this, 'add_category_page_top_elements' ), 40, 0 );
 			add_action( 'woocommerce_after_main_content', array( $this, 'add_category_page_bottom_elements' ), 5, 0 );
 			add_action( 'woocommerce_after_cart', array( $this, 'add_cart_page_bottom_elements' ), 10, 0 );
+			add_action( 'woocommerce_before_main_content', array( $this, 'add_search_page_top_elements' ), 30, 0 );
+			add_action( 'woocommerce_after_main_content', array( $this, 'add_search_page_bottom_elements' ), 5, 0 );
 			// Custom hooks
 			add_action( 'wcnt_before_search_result', array( $this, 'add_search_page_top_elements' ), 10, 0 );
 			add_action( 'wcnt_after_search_result', array( $this, 'add_search_page_bottom_elements' ), 10, 0 );

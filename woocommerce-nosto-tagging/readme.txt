@@ -80,10 +80,14 @@ be added to the shops theme in order for the plugin to function to its full exte
 	* This action should be called above the search result list on the on search pages
 	* You need to add `<?php do_action('wcnt_before_search_result'); ?>` in your themes search page template at the
 	appropriate location
+	* Please note that this only applies to the WordPress search and not the WooCommerce search
+		* If you are using the WooCommerce search, you do not need to add any actions to the templates
 * wcnt_after_search_result
 	* This action should be called below the search result list on the on search pages
-	* You need to add `<?php do_action('wcnt_after_search_result'); ?>` in your themes search page template at
-	the appropriate location
+	* You need to add `<?php do_action('wcnt_after_search_result'); ?>` in your themes search page template at the
+	appropriate location
+	* Please note that this only applies to the WordPress search and not the WooCommerce search
+		* If you are using the WooCommerce search, you do not need to add any actions to the templates
 * wcnt_before_main_content
 	* This action should be called at the beginning of every page in the shop
 	* You need to add `<?php do_action('wcnt_before_main_content'); ?>` in your themes header template, inside the main
