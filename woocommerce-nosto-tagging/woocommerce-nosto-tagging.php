@@ -412,6 +412,7 @@ class WC_Nosto_Tagging
 			foreach ( (array) $order->get_items() as $item ) {
 				// We need to calculate the unit price manually, due to a bug in WooCommerce
 				// where the line item subtotal is calculated ( WC_Order::get_item_subtotal() ).
+				// BCMath functions are used to avoid floating point precision issues.
 				$unit_price = bcadd( $item['line_subtotal'], $item['line_subtotal_tax'], 2 );
 				if ( 1 < $item['qty'] ) {
 					$unit_price = bcdiv( $unit_price, $item['qty'], 2 );
@@ -444,6 +445,7 @@ class WC_Nosto_Tagging
 				if ( 0 < $shipping ) {
 					// Shipping tax needs to be added manually.
 					if ( 0 < ( $shipping_tax = $order->get_shipping_tax() ) ) {
+						// BCMath functions are used to avoid floating point precision issues.
 						$shipping = bcadd( $shipping, $shipping_tax, 2 );
 					}
 					$data['line_items'][] = array(
@@ -461,6 +463,7 @@ class WC_Nosto_Tagging
 				if ( is_array( $fees ) ) {
 					foreach ( $fees as $fee ) {
 						// The tax needs to be added manually.
+						// BCMath functions are used to avoid floating point precision issues.
 						$unit_price = bcadd( $fee['line_total'], $fee['line_tax'], 2 );
 						if ( 0 < $unit_price ) {
 							$data['line_items'][] = array(
@@ -906,9 +909,11 @@ class WC_Nosto_Tagging
 
 		// Check that the PHP extension BCMath is loaded.
 		// The plugin uses this to calculate prices in the order tagging.
+		// BCMath is bundled in PHP since version 4.0.4, but it is not enabled
+		// if PHP was not configured with the --enable-bcmath option.
 		if ( ! extension_loaded( 'bcmath' ) ) {
 			$error = __( 'WooCommerce Nosto Tagging requires the BCMath (Arbitrary Precision Mathematics) PHP
-				extension. Please contact your system administrator.' );
+				extension to be loaded. Please contact your system administrator.' );
 		}
 
 		if ( ! empty( $error ) ) {
