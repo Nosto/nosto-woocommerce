@@ -351,17 +351,19 @@ class WC_Nosto_Tagging
 			$line_items    = array();
 
 			foreach ( $cart_items as $cart_item ) {
-				/** @var $product WC_Product */
-				$product   = $cart_item['data'];
-				$line_item = array(
-					'product_id'          => (int) $cart_item['product_id'],
-					'quantity'            => (int) $cart_item['quantity'],
-					'name'                => (string) $product->get_title(),
-					'unit_price'          => $this->format_price( $product->get_price_including_tax() ),
-					'price_currency_code' => $currency_code,
-				);
+				if ( isset( $cart_item['data'] ) && $cart_item['data'] instanceof WC_Product ) {
+					/** @var $product WC_Product */
+					$product   = $cart_item['data'];
+					$line_item = array(
+						'product_id'          => (int) $cart_item['product_id'],
+						'quantity'            => (int) $cart_item['quantity'],
+						'name'                => (string) $product->get_title(),
+						'unit_price'          => $this->format_price( $product->get_price_including_tax() ),
+						'price_currency_code' => $currency_code,
+					);
 
-				$line_items[] = $line_item;
+					$line_items[] = $line_item;
+				}
 			}
 
 			if ( ! empty( $line_items ) ) {
@@ -402,7 +404,7 @@ class WC_Nosto_Tagging
 				'line_items'   => array(),
 			);
 
-			foreach ( $order->get_items() as $item ) {
+			foreach ( (array) $order->get_items() as $item ) {
 				// We need to calculate the unit price manually, due to a bug in WooCommerce
 				// where the line item subtotal is calculated ( WC_Order::get_item_subtotal() ).
 				$unit_price = bcadd( $item['line_subtotal'], $item['line_subtotal_tax'], 2 );
@@ -691,16 +693,18 @@ class WC_Nosto_Tagging
 	 */
 	protected function get_list_price_including_tax( $product ) {
 		if ( $product instanceof WC_Product ) {
-			// Clone the object so we can modify the price properties without
-			// breaking anything. We do this in order to use the internal
-			// WooCommerce tax calculations.
-			$product_clone = clone $product;
+			if ( $product->is_on_sale() && isset( $product->regular_price ) ) {
+				// If the product is on sale, then we create a new instance of
+				// it to avoid breaking things when we assign it a new price attribute.
+				// We do this in order to use the internal WooCommerce tax calculations.
 
-			if ( $product_clone->is_on_sale() && isset( $product_clone->regular_price ) ) {
-				$product_clone->set_price( $product_clone->regular_price );
+				/** @var $new_product WC_Product */
+				$new_product = get_product( $product->id );
+				$new_product->set_price( $product->regular_price );
+				$list_price = $new_product->get_price_including_tax();
+			} else {
+				$list_price = $product->get_price_including_tax();
 			}
-
-			$list_price = $product_clone->get_price_including_tax();
 		} else {
 			$list_price = 0;
 		}
@@ -893,6 +897,13 @@ class WC_Nosto_Tagging
 				self::MIN_WC_VERSION,
 				self::VERSION
 			);
+		}
+
+		// Check that the PHP extension BCMath is loaded.
+		// The plugin uses this to calculate prices in the order tagging.
+		if ( ! extension_loaded( 'bcmath' ) ) {
+			$error = __( 'WooCommerce Nosto Tagging requires the BCMath (Arbitrary Precision Mathematics) PHP
+				extension. Please contact your system administrator.' );
 		}
 
 		if ( ! empty( $error ) ) {
