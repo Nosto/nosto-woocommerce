@@ -160,7 +160,8 @@ class WC_Nosto_Tagging
 
 		register_activation_hook( $this->plugin_name, array( $this, 'activate' ) );
 		register_deactivation_hook( $this->plugin_name, array( $this, 'deactivate' ) );
-		register_uninstall_hook( $this->plugin_name, array( $this, 'uninstall' ) );
+		// The uninstall hook callback needs to be a static class method or function.
+		register_uninstall_hook( $this->plugin_name, array( __CLASS__, 'uninstall' ) );
 	}
 
 	/**
@@ -226,10 +227,14 @@ class WC_Nosto_Tagging
 	 *
 	 * @since 1.0.0
 	 */
-	public function uninstall() {
+	public static function uninstall() {
 		$page_id = get_option( 'woocommerce_nosto_tagging_top_sellers_page_id' );
 		if ( $page_id ) {
-			$this->load_class( 'WC_Nosto_Tagging_Top_Sellers_Page' );
+			// This has to be a static method, so we load the top sellers class through
+			// the main plugin instance. The instance will already exist at this point,
+			// so there will be no unnecessary instantiation.
+			// This is just to avoid duplicating the code in WC_Nosto_Tagging::load_class().
+			WC_Nosto_Tagging::get_instance()->load_class( 'WC_Nosto_Tagging_Top_Sellers_Page' );
 			$page = new WC_Nosto_Tagging_Top_Sellers_Page( $page_id );
 			$page->remove();
 		}
@@ -628,6 +633,19 @@ class WC_Nosto_Tagging
 	}
 
 	/**
+	 * Load class file based on class name.
+	 *
+	 * The file are expected to be located in the plugin "classes" directory.
+	 *
+	 * @since 1.0.0
+	 * @param string $class_name The name of the class to load
+	 */
+	public function load_class( $class_name = '' ) {
+		$file = 'class-' . strtolower( str_replace( '_', '-', $class_name ) ) . '.php';
+		require_once( $this->plugin_dir . 'classes/' . $file );
+	}
+
+	/**
 	 * Registers the Nosto JavaScript to be added to the page head section.
 	 *
 	 * Both the server address and the account name need to be set for the
@@ -841,19 +859,6 @@ class WC_Nosto_Tagging
 				}
 			}
 		}
-	}
-
-	/**
-	 * Load class file based on class name.
-	 *
-	 * The file are expected to be located in the plugin "classes" directory.
-	 *
-	 * @since 1.0.0
-	 * @param string $class_name The name of the class to load
-	 */
-	protected function load_class( $class_name = '' ) {
-		$file = 'class-' . strtolower( str_replace( '_', '-', $class_name ) ) . '.php';
-		require_once( $this->plugin_dir . 'classes/' . $file );
 	}
 
 	/**
