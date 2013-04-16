@@ -59,3 +59,9 @@ WordPress version 3.5 or above and WooCommerce 2.0.0 or above.
 
 * 1.0.0
 	* Initial release
+
+## Known issues
+
+* Does not support products that are sold only in a group product but NOT individually in the store
+	* A group product consists of multiple simple products and the group is tagged on the product page
+	while the individual simple products in the group are tagged in the cart and order
