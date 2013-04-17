@@ -81,6 +81,18 @@ class WC_Nosto_Tagging
 	private static $instance = null;
 
 	/**
+	 * Whitelist of product types that are allowed in product tagging.
+	 *
+	 * @since 1.0.0
+	 * @var array
+	 */
+	protected static $product_type_whitelist = array(
+		'simple',
+		'variable',
+		'grouped',
+	);
+
+	/**
 	 * The plugin directory path.
 	 *
 	 * @since 1.0.0
@@ -266,7 +278,7 @@ class WC_Nosto_Tagging
 			/** @var $product WC_Product */
 			global $product;
 
-			if ( $product instanceof WC_Product ) {
+			if ( $product instanceof WC_Product && $product->is_type( self::$product_type_whitelist ) ) {
 				$data       = array();
 				$product_id = (int) $product->id;
 
