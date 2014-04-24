@@ -126,13 +126,13 @@ class WC_Nosto_Tagging
 	protected $server_address = '';
 
 	/**
-	 * The Nosto account name.
+	 * The Nosto account id.
 	 * This is a setting configured on the admin page.
 	 *
 	 * @since 1.0.0
 	 * @var string
 	 */
-	protected $account_name = '';
+	protected $account_id = '';
 
 	/**
 	 * If the default Nosto elements should be outputted.
@@ -401,23 +401,17 @@ class WC_Nosto_Tagging
 		if ( is_numeric( $order_id ) && 0 < $order_id ) {
 			$order = new WC_Order( $order_id );
 
-			if ( 0 < $order->user_id ) {
-				$user     = new WP_User( $order->user_id );
-				$customer = $this->get_customer_data( $user );
-			} else {
-				// Fall back on the billing address data if the user is anonymous.
-				$customer = array(
-					'first_name' => $order->billing_first_name,
-					'last_name'  => $order->billing_last_name,
-					'email'      => $order->billing_email,
-				);
-			}
+			$buyer = array(
+				'first_name' => $order->billing_first_name,
+				'last_name'  => $order->billing_last_name,
+				'email'      => $order->billing_email,
+			);
 
 			$currency_code = get_woocommerce_currency();
 
 			$data = array(
 				'order_number' => $order->id,
-				'customer'     => $customer,
+				'buyer'        => $buyer,
 				'line_items'   => array(),
 			);
 
@@ -661,17 +655,16 @@ class WC_Nosto_Tagging
 	/**
 	 * Registers the Nosto JavaScript to be added to the page head section.
 	 *
-	 * Both the server address and the account name need to be set for the
+	 * Both the server address and the account id need to be set for the
 	 * script to be added.
 	 *
 	 * @since 1.0.0
 	 */
 	public function register_scripts() {
-		if ( ! empty( $this->server_address ) && ! empty( $this->account_name ) ) {
+		if ( ! empty( $this->account_id ) ) {
 			wp_enqueue_script( 'nosto-tagging-script', $this->plugin_url . 'js/embed.js' );
 			$params = array(
-				'serverAddress' => esc_js( $this->server_address ),
-				'accountName'   => esc_js( $this->account_name ),
+				'accountId' => esc_js( $this->account_id ),
 			);
 			wp_localize_script( 'nosto-tagging-script', 'NostoTagging', $params );
 		}

@@ -48,22 +48,22 @@ class WC_Integration_Nosto_Tagging extends WC_Integration
 	 *
 	 * Adds three settings:
 	 * - server address (text)
-	 * - account name (text)
+	 * - account id (text)
 	 * - use default Nosto element (radio; yes/no)
 	 *
 	 * @since 1.0.0
 	 */
 	function init_form_fields() {
 		$this->form_fields = array(
-			'server_address'       => array(
+			/*'server_address'       => array(
 				'title'       => __( 'Server Address' ),
 				'description' => __( 'The server address for the Nosto marketing automation service.' ),
 				'type'        => 'text',
 				'default'	  => self::DEFAULT_SERVER_ADDRESS,
-			),
-			'account_name'         => array(
-				'title'       => __( 'Account name' ),
-				'description' => __( 'Your Nosto marketing automation service account name.' ),
+			),*/
+			'account_id'           => array(
+				'title'       => __( 'Account ID' ),
+				'description' => __( 'Your Nosto marketing automation service account id.' ),
 				'type'        => 'text',
 				'default'	  => '',
 			),
@@ -158,7 +158,7 @@ class WC_Integration_Nosto_Tagging extends WC_Integration
 	 *
 	 * WooCommerce does not allow us to show an error message to the user
 	 * if incorrect data is entered, so we just sanitize the server address
-	 * and account name before saving.
+	 * and account id before saving.
 	 *
 	 * If proper error handling is needed, we need to move the plugin settings page
 	 * outside the WooCommerce settings structure. Then we can use the WordPress

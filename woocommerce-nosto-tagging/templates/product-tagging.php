@@ -28,7 +28,7 @@
 			<span class="category"><?php echo esc_html( $category_path ); ?></span>
 		<?php endforeach; ?>
 		<?php if ( ! empty( $product['description'] ) ): ?>
-			<span class="description"><?php echo esc_html( $product['description'] ); ?></span>
+			<span class="description"><?php echo $product['description']; ?></span>
 		<?php endif; ?>
 		<?php if ( ! empty( $product['date_published'] ) ): ?>
 			<span class="date_published"><?php echo esc_html( $product['date_published'] ); ?></span>

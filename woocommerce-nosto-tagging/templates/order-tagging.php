@@ -6,20 +6,20 @@
  *
  * @package WooCommerce Nosto Tagging
  * @since   1.0.0
- * @var array $order Assoc list that includes order_number, customer and line_items
+ * @var array $order Assoc list that includes order_number, buyer and line_items
  */
 ?>
 
 <?php if ( isset( $order ) && is_array( $order ) ): ?>
 	<div class="nosto_purchase_order" style="display:none">
 		<span class="order_number"><?php echo esc_html( $order['order_number'] ); ?></span>
-		<?php if ( ! empty( $order['customer'] ) ): ?>
+		<?php if ( ! empty( $order['buyer'] ) ): ?>
 			<div class="buyer">
-				<span class="email"><?php echo esc_html( $order['customer']['email'] ); ?></span>
-				<?php if ( ! empty( $order['customer']['first_name'] ) ): ?>
-					<span class="first_name"><?php echo esc_html( $order['customer']['first_name'] ); ?></span>
+				<span class="email"><?php echo esc_html( $order['buyer']['email'] ); ?></span>
+				<?php if ( ! empty( $order['buyer']['first_name'] ) ): ?>
+					<span class="first_name"><?php echo esc_html( $order['buyer']['first_name'] ); ?></span>
 				<?php endif; ?>
-				<span class="last_name"><?php echo esc_html( $order['customer']['last_name'] ); ?></span>
+				<span class="last_name"><?php echo esc_html( $order['buyer']['last_name'] ); ?></span>
 			</div>
 		<?php endif; ?>
 		<div class="purchased_items">

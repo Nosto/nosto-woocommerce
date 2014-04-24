@@ -121,6 +121,13 @@ This ID is used as the Nosto element div ID attribute and can be whatever you de
 
 == Changelog ==
 
+= 1.0.1 =
+* Hide "Server address" from plugin configuration
+* Change "Account name" to "Account ID" in plugin configuration
+* Remove html escape from product description in product tagging
+* Change order tagging buyer info to always come from the checkout form billing address
+* Update embed script
+
 = 1.0.0 =
 * Initial release
 
