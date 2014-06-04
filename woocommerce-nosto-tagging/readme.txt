@@ -3,7 +3,7 @@ Contributors: nosto
 Tags: nosto tagging, woocommerce, e-commerce, ecommerce
 Requires at least: 3.5.0
 Tested up to: 3.9.0
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,6 +120,9 @@ WordPress widget. After dropping the widget in the appropriate sidebar container
 This ID is used as the Nosto element div ID attribute and can be whatever you decide.
 
 == Changelog ==
+
+= 1.0.2 =
+* Settings page has url been fixed
 
 = 1.0.1 =
 * Hide "Server address" from plugin configuration

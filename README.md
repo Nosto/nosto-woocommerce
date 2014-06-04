@@ -57,6 +57,9 @@ WordPress version 3.5 or above and WooCommerce 2.0.0 or above.
 
 ## Changelog
 
+* 1.0.2
+	* Settings page has url been fixed
+
 * 1.0.1
 	* Hide "Server address" from plugin configuration
 	* Change "Account name" to "Account ID" in plugin configuration
