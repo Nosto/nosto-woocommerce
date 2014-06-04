@@ -216,7 +216,7 @@ class WC_Integration_Nosto_Tagging extends WC_Integration
 	 */
 	public function register_action_links( $links, $plugin_file ) {
 		if ( $plugin_file === WC_Nosto_Tagging::get_instance()->get_plugin_name() ) {
-			$url     = admin_url( 'admin.php?page=woocommerce_settings&tab=integration&section=nosto_tagging' );
+			$url     = admin_url( 'admin.php?page=wc-setting&tab=integration&section=nosto_tagging' );
 			$links[] = '<a href="' . esc_attr( $url ) . '">' . esc_html__( 'Settings' ) . '</a>';
 		}
 		return $links;
