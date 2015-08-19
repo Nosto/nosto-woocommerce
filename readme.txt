@@ -2,8 +2,8 @@
 Contributors: nosto
 Tags: nosto tagging, woocommerce, e-commerce, ecommerce
 Requires at least: 3.5.0
-Tested up to: 3.9.0
-Stable tag: 1.0.2
+Tested up to: 4.2.4
+Stable tag: 1.0.3
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,6 +121,9 @@ This ID is used as the Nosto element div ID attribute and can be whatever you de
 
 == Changelog ==
 
+= 1.0.3 =
+* Fix rename of woocommerce method "get_shipping" to "get_total_shipping" in versions 2.1.0 and above
+
 = 1.0.2 =
 * Settings page has url been fixed
 
@@ -141,3 +144,9 @@ the /assets directory or the directory that contains the stable readme.txt (tags
 directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
 (or jpg, jpeg, gif).
 2. This is the second screenshot
+
+== Known issues ==
+
+* Does not support products that are sold only in a group product but NOT individually in the store
+	* A group product consists of multiple simple products and the group is tagged on the product page
+	while the individual simple products in the group are tagged in the cart and order
