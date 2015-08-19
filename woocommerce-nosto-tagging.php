@@ -9,6 +9,7 @@
 */
 
 /*	Copyright 2013 Nosto Solutions Ltd  (email : PLUGIN AUTHOR EMAIL)
+/*	Copyright 2015 Nosto Solutions Ltd  (email : PLUGIN AUTHOR EMAIL)
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License, version 2, as
