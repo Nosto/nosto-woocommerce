@@ -141,3 +141,9 @@ the /assets directory or the directory that contains the stable readme.txt (tags
 directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
 (or jpg, jpeg, gif).
 2. This is the second screenshot
+
+== Known issues ==
+
+* Does not support products that are sold only in a group product but NOT individually in the store
+	* A group product consists of multiple simple products and the group is tagged on the product page
+	while the individual simple products in the group are tagged in the cart and order
