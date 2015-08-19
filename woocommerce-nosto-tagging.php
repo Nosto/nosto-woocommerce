@@ -4,11 +4,11 @@
 	Plugin URI: http://wordpress.org/extend/plugins/woocommerce-nosto-tagging/
 	Description: Implements the required tagging blocks for using Nosto marketing automation service.
 	Author: Nosto Solutions Ltd
-	Version: 1.0.2
+	Version: 1.0.3
 	License: GPLv2
 */
 
-/*	Copyright 2013 Nosto Solutions Ltd  (email : PLUGIN AUTHOR EMAIL)
+/*	Copyright 2015 Nosto Solutions Ltd  (email : PLUGIN AUTHOR EMAIL)
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License, version 2, as
@@ -38,7 +38,7 @@ class WC_Nosto_Tagging
 	 *
 	 * @since 1.0.0
 	 */
-	const VERSION = '1.0.2';
+	const VERSION = '1.0.3';
 
 	/**
 	 * Minimum WordPress version this plugin works with.
@@ -442,7 +442,12 @@ class WC_Nosto_Tagging
 				}
 
 				// Shipping costs.
-				$shipping = $order->get_shipping();
+				// Try the new getter first, that was introduced in WooCommerce 2.1.0 and replaced the old getter.
+				if ( method_exists( $order, 'get_total_shipping' ) ) {
+					$shipping = $order->get_total_shipping();
+				} else {
+					$shipping = $order->get_shipping();
+				}
 				if ( 0 < $shipping ) {
 					// Shipping tax needs to be added manually, as there are no getters for the calculated value.
 					if ( 0 < ( $shipping_tax = $order->get_shipping_tax() ) ) {
