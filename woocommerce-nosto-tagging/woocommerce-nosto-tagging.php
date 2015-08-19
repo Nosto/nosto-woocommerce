@@ -442,7 +442,12 @@ class WC_Nosto_Tagging
 				}
 
 				// Shipping costs.
-				$shipping = $order->get_shipping();
+				// Try the new getter first, that was introduced in WooCommerce 2.1.0 and replaced the old getter.
+				if ( method_exists( $order, 'get_total_shipping' ) ) {
+					$shipping = $order->get_total_shipping();
+				} else {
+					$shipping = $order->get_shipping();
+				}
 				if ( 0 < $shipping ) {
 					// Shipping tax needs to be added manually, as there are no getters for the calculated value.
 					if ( 0 < ( $shipping_tax = $order->get_shipping_tax() ) ) {
