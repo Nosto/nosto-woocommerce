@@ -1,63 +1,35 @@
-=== WooCommerce Nosto Tagging ===
+=== Nosto - SaaS Recommendation Engine for WooCommerce ===
 Contributors: nosto
-Tags: nosto tagging, woocommerce, e-commerce, ecommerce
+Tags: nosto tagging, woocommerce, e-commerce, ecommerce, personalization, recommendations, 
 Requires at least: 3.5.0
 Tested up to: 4.2.4
 Stable tag: 1.0.3
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Implements the required tagging blocks for using Nosto marketing automation service.
+Nosto increases online store revenues by delivering customers a personalized shopping experience using behavioral data and real-time data processing.
 
 == Description ==
 
-The plugin integrates the Nosto marketing automation service, that can produce personalized product recommendations on
-the site.
+Nosto’s risk free SaaS solution enables personalized product recommendations in real time. Its plug and play solution makes enterprise level recommendation engine easily accessible to a fraction of the typical cost to online stores of all sizes, automating marketing activities and increasing conversion, average order value, customer retention and store revenues as a result.
 
-The plugin adds the needed data to the site through the WordPress Action API. There are two types of data added by the
-plugin; tagging blocks and Nosto elements.
+With Nosto’s WooCommerce extension implementation is quick and painless. Simply install the extension, add your own design for recommendations or use default themes provided and start improving your online sales. You can be up and running with personalized recommendations in less than an hour!
 
-Tagging blocks are used to hold meta-data about products, categories, orders, shopping cart and customers on your site.
-These types of blocks do not hold any visual elements, only meta-data. The meta-data is sent to the Nosto marketing
-automation service when customers are browsing the site. The service then produces product recommendations based on the
-information that is sent and displays the recommendations in the Nosto elements.
+Display up- and cross-sell recommendations customizable with multiple rulesets to support your business goals.
 
-Nosto elements are placeholders for the product recommendations coming from the Nosto marketing automation service. The
-elements consist of only an empty div element that is populated with content from the Nosto marketing automation
-service.
+Use personalized recommendations to target every individual visitor with product recommendations that particular visitor is most likely to buy, based on subsequential and trend data collected from your site.
 
-By default the plugin creates the following Nosto elements:
+Promote best converting products through top lists that update in real-time along with over thirty on-site recommendation features.
 
-* 3 elements for the product page
-	* "Other Customers Were Interested In"
-	* "You Might Also Like"
-	* "Most Popular Products In This Category"
-* 3 elements for the shopping cart page
-	* "Customers Who Bought These Also Bought"
-	* "Products You Recently Viewed"
-	* "Most Popular Right Now"
-* 2 elements for the product category page, top and bottom
-	* "Most Popular Products In This Category"
-	* "Your Recent History"
-* 2 elements for the search results page, top and bottom
-	* "Customers who searched '{search term}' viewed"
-	* "Your Recent History"
-* 2 elements for the sidebars, 1 left and 1 right
-	* "Popular Products"
-	* "Products You Recently Viewed"
-* 2 elements for all pages, top and bottom
-	* "Products containing '{keywords}'"
-	* "Products You Recently Viewed"
+Send personalized triggered emails automatically to your customers. Nosto features multiple email types from abandoned cart email to customer retention campaigns.
 
-Note that you can change what recommendations are shown in the Nosto elements. You can also add additional elements
-to the site by simply dropping in div elements of the following format:
-`<div class="nosto_element" id="{id of your choice}"></div>`
+Nosto is delivered directly from the cloud so it doesn’t increase your server load or slow down page load time.
 
-The plugin also creates a new page called "Top Sellers". The page is added to the sites main menu automatically when
-activating the plugin. The page contains only one Nosto element by default.
+Risk-free CPA, "no sales - no bill", pricing model and service delivered from cloud without contractual commitment.
 
-A new sidebar widget is also added by the module. This widget is to be used if you wish to include Nosto elements in
-your shops sidebars.
+START YOUR FREE TRIAL NOW! 
+
+Install the extension, open up an account on www.nosto.com, choose WooCommerce as your platform in the sign-up and start your 14 day free trial today - no credit card required!
 
 == Installation ==
 
