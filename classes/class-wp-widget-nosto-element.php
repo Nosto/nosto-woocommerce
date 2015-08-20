@@ -70,8 +70,8 @@ class WP_Widget_Nosto_Element extends WP_Widget
 
 		WC_Nosto_Tagging::get_instance()->render( 'widget-nosto-element-options', array(
 			'nosto_id'            => $instance['nosto_id'],
-		   	'nosto_id_field_id'   => $this->get_field_id( 'nosto_id' ),
-		   	'nosto_id_field_name' => $this->get_field_name( 'nosto_id' ),
+			'nosto_id_field_id'   => $this->get_field_id( 'nosto_id' ),
+			'nosto_id_field_name' => $this->get_field_name( 'nosto_id' ),
 		) );
 	}
 
