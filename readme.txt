@@ -19,7 +19,7 @@ We are proud to be trusted by over 10,000 retailers from 100+ countries worldwid
 
 Go live today with 14 days free – no credit card required!
 
-### Features
+Features
 
 Personalized Facebook Ads  
 -The fastest, easiest way to deliver personalized advertising to a marketplace of over 1.4 billion people.
@@ -33,7 +33,7 @@ Personalized Behavioral Pop-ups
 Personalized Triggered Emails  
 -Reconnect with your customers through automated, personalized emails.
 
-### OK, but why Nosto?
+OK, but why Nosto?
 
 -Pay only for the sales we help you make  
 We believe it’s important to be fair. That is why we only make money when you do, taking a small % of the revenue we help you generate. No setup costs. No fixed fees. No minimum contract lengths. Learn more about our pricing [here](http://www.nosto.com/pricing/).
@@ -134,12 +134,12 @@ This ID is used as the Nosto element div ID attribute and can be whatever you de
 
 == Screenshots ==
 
-1. ...
-2. ...
-3. ...
-4. ...
-5. ...
-6. ...
+1. The real-time Nosto admin dashboard for a clear overview
+2. “Top list” on-site recommendation as displayed by Nosto
+3. Personalized Behavioral Pop-Ups
+4. Personalized Facebook Ads
+5. Personalized Triggered Emails / An Abandoned Cart email example
+6. Personalized shopping experiences - wherever your customers are
 
 == Known issues ==
 
