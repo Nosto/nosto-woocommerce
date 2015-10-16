@@ -113,7 +113,7 @@ This ID is used as the Nosto element div ID attribute and can be whatever you de
 == Changelog ==
 
 = 1.0.4 =
-* Support new WordPress & WooCommerce versions
+* Support WordPress 4.3.1 & WooCommerce 2.4.7 versions
 * Updated plugin description
 
 = 1.0.3 =
