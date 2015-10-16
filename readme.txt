@@ -1,35 +1,54 @@
-=== Nosto - SaaS Recommendation Engine for WooCommerce ===
+=== Nosto - Personalization for WooCommerce ===
 Contributors: nosto
 Tags: nosto tagging, woocommerce, e-commerce, ecommerce, personalization, recommendations, 
 Requires at least: 3.5.0
-Tested up to: 4.2.4
-Stable tag: 1.0.3
+Tested up to: 4.3.1
+Stable tag: 1.0.4
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Nosto increases online store revenues by delivering customers a personalized shopping experience using behavioral data and real-time data processing.
+Nosto is the easiest way to deliver your customers personalized shopping experiences - wherever they are.
 
 == Description ==
 
-Nosto’s risk free SaaS solution enables personalized product recommendations in real time. Its plug and play solution makes enterprise level recommendation engine easily accessible to a fraction of the typical cost to online stores of all sizes, automating marketing activities and increasing conversion, average order value, customer retention and store revenues as a result.
+Nosto analyzes your customers’ behavior, learning their likes and dislikes and enables you to automatically personalize your product recommendations, triggered emails, pop-ups and facebook ads in real-time, for each individual shopper. The result? Happier customers that buy more.
 
-With Nosto’s WooCommerce extension implementation is quick and painless. Simply install the extension, add your own design for recommendations or use default themes provided and start improving your online sales. You can be up and running with personalized recommendations in less than an hour!
+Combining patent-pending world-class technology with a core focus on ease of use, there are no complicated integrations or deep technical know-how required. And with a success-based pricing model that scales with your business, you’ll be up and running in minutes - totally risk free.
 
-Display up- and cross-sell recommendations customizable with multiple rulesets to support your business goals.
+We are proud to be trusted by over 10,000 retailers from 100+ countries worldwide.
 
-Use personalized recommendations to target every individual visitor with product recommendations that particular visitor is most likely to buy, based on subsequential and trend data collected from your site.
+Go live today with 14 days free – no credit card required!
 
-Promote best converting products through top lists that update in real-time along with over thirty on-site recommendation features.
+### Features
 
-Send personalized triggered emails automatically to your customers. Nosto features multiple email types from abandoned cart email to customer retention campaigns.
+Personalized Facebook Ads  
+-The fastest, easiest way to deliver personalized advertising to a marketplace of over 1.4 billion people.
 
-Nosto is delivered directly from the cloud so it doesn’t increase your server load or slow down page load time.
+Personalized Product Recommendations  
+-Recommend shoppers the most relevant products in real-time based on their unique user behavior.
 
-Risk-free CPA, "no sales - no bill", pricing model and service delivered from cloud without contractual commitment.
+Personalized Behavioral Pop-ups  
+-Reduce site abandonment and increase conversion with time-limited special offers and one-time discounts.
 
-START YOUR FREE TRIAL NOW! 
+Personalized Triggered Emails  
+-Reconnect with your customers through automated, personalized emails.
 
-Install the extension, open up an account on www.nosto.com, choose WooCommerce as your platform in the sign-up and start your 14 day free trial today - no credit card required!
+### OK, but why Nosto?
+
+-Pay only for the sales we help you make  
+We believe it’s important to be fair. That is why we only make money when you do, taking a small % of the revenue we help you generate. No setup costs. No fixed fees. No minimum contract lengths. Learn more about our pricing [here](http://www.nosto.com/pricing/).
+
+-Easy to customize, easy to use  
+Nosto makes it easy for you to create and edit recommendations with just a few clicks. With options available for advanced rules and filtering and customizable design, the control is in your hands.
+
+-1:1 personalization  
+Unlike other services, Nosto delivers tailored recommendations right down to the individual. We know the brands your customers love, the categories they shop and what they’ve bought or browsed in the past. The result? Higher conversion rates for you.
+
+-Real-time  
+Nosto’s self-learning recommendation engine works in real-time, detecting product and customer behavior updates as they happen and updating recommendations accordingly, ensuring a smooth, up-to-date and relevant user experience at all times.
+
+-In-depth analytics  
+Nosto’s Admin Panel provides in-depth analytics and reporting tools to help you keep track of your KPIs and how Nosto is helping you reach them. Keep on top of your business, wherever you are.
 
 == Installation ==
 
@@ -93,6 +112,10 @@ This ID is used as the Nosto element div ID attribute and can be whatever you de
 
 == Changelog ==
 
+= 1.0.4 =
+* Support new WordPress & WooCommerce versions
+* Updated plugin description
+
 = 1.0.3 =
 * Fix rename of woocommerce method "get_shipping" to "get_total_shipping" in versions 2.1.0 and above
 
@@ -111,11 +134,12 @@ This ID is used as the Nosto element div ID attribute and can be whatever you de
 
 == Screenshots ==
 
-1. This screenshot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screenshot
+1. ...
+2. ...
+3. ...
+4. ...
+5. ...
+6. ...
 
 == Known issues ==
 
