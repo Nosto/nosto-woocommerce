@@ -731,6 +731,13 @@ class WC_Nosto_Tagging
 				$new_product = get_product( $product->id );
 				$new_product->set_price( $product->regular_price );
 				$list_price = $new_product->get_price_including_tax();
+				if (
+					empty($list_price)
+					&& $product->product_type === "variable"
+					&& isset($product->min_variation_price)
+				) {
+					$list_price = $product->min_variation_price;
+				}
 			} else {
 				$list_price = $product->get_price_including_tax();
 			}
