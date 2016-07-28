@@ -5,5 +5,8 @@
   "license": "BSD-3-Clause",
   "require-dev": {
     "phing/phing": "2.*"
+  },
+  "require": {
+      "composer/installers": "~1.0"
   }
 }
