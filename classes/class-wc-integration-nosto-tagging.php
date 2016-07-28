@@ -17,14 +17,6 @@
 class WC_Integration_Nosto_Tagging extends WC_Integration
 {
 	/**
-	 * Default server address for the Nosto marketing automation service.
-	 * Used on plugin config page.
-	 *
-	 * @since 1.0.0
-	 */
-	const DEFAULT_SERVER_ADDRESS = 'connect.nosto.com';
-
-	/**
 	 * Constructor.
 	 *
 	 * Init and hook in the integration.
@@ -169,7 +161,17 @@ class WC_Integration_Nosto_Tagging extends WC_Integration
 	 * @return string
 	 */
 	public function validate_text_field( $key ) {
-		$text = parent::validate_text_field( $key );
+
+		// There was a change in Woocommerce 2.6.0 where the logic of validate_text_field changed
+		$method_args = WC_Nosto_Tagging::get_method_args(get_parent_class($this), 'validate_text_field');
+		$diff = array_diff($method_args, array('value', 'key'));
+		$form_field = $this->get_field_key($key);
+		if (count($diff) == 0) {
+			$form_val = isset($_POST[$form_field]) ? $_POST[$form_field] : null;
+			$text = parent::validate_text_field( $key, $form_val );
+		} else { // < 2.6.0
+			$text = parent::validate_text_field( $key );
+		}
 
 		switch ( $key ) {
 			case 'server_address':
@@ -178,7 +180,7 @@ class WC_Integration_Nosto_Tagging extends WC_Integration
 				if ( empty( $text ) ) {
 					// The given url was not valid.
 					// Apply the default url.
-					$text = self::DEFAULT_SERVER_ADDRESS;
+					$text = WC_Nosto_Tagging::get_nosto_server_address();
 				} else {
 					// Remove the protocol, we do not want it in the url.
 					$text = preg_replace( '@^https?://@i', '', $text );
@@ -216,7 +218,7 @@ class WC_Integration_Nosto_Tagging extends WC_Integration
 	 */
 	public function register_action_links( $links, $plugin_file ) {
 		if ( $plugin_file === WC_Nosto_Tagging::get_instance()->get_plugin_name() ) {
-			$url     = admin_url( 'admin.php?page=wc-setting&tab=integration&section=nosto_tagging' );
+			$url     = admin_url( 'admin.php?page=wc-settings&tab=integration&section=nosto_tagging' );
 			$links[] = '<a href="' . esc_attr( $url ) . '">' . esc_html__( 'Settings' ) . '</a>';
 		}
 		return $links;
