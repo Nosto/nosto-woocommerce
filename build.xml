@@ -35,7 +35,7 @@
     <property name="builddest" value="./build/package" override="true" />
     <property name="srcdir"   value="${project.basedir}" override="true" />
     <!--suppress PhingDomInspection -->
-    <property name="packagename"   value="nosto-for-woocommerce-${version}.zip" override="true" />
+    <property name="packagename"   value="${phing.project.name}.zip" override="true" />
 
     <!-- ============================================  -->
     <!-- Target: prepare                               -->
