@@ -35,7 +35,7 @@
     <property name="builddest" value="./build/package" override="true" />
     <property name="srcdir"   value="${project.basedir}" override="true" />
     <!--suppress PhingDomInspection -->
-    <property name="packagename"   value="${phing.project.name}.zip" override="true" />
+    <property name="packagename"   value="${phing.project.name}-${version}.zip" override="true" />
 
     <!-- ============================================  -->
     <!-- Target: prepare                               -->
@@ -45,8 +45,8 @@
         <delete dir="${builddest}" />
         <delete dir="${buildsrc}" />
         <mkdir dir="${builddest}" />
-        <mkdir dir="${buildsrc}" />
-        <copy todir="${buildsrc}">
+        <mkdir dir="${buildsrc}/${phing.project.name}" />
+        <copy todir="${buildsrc}/${phing.project.name}">
             <fileset refid="sourcefiles" />
         </copy>
     </target>
@@ -80,7 +80,7 @@
         <exec executable="zip" dir="${buildsrc}">
             <arg value="-r" />
             <arg value="${packagename}" />
-            <arg value="*" />
+            <arg value="${phing.project.name}" />
         </exec>
         <move file="${buildsrc}/${packagename}" tofile="${builddest}/${packagename}" />
         <echo msg="Files copied and compressed" />
