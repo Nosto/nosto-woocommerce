@@ -96,6 +96,15 @@ class WC_Nosto_Tagging
 	const PRODUCT_TYPE_GROUPED = 'grouped';
 
 	/**
+	 * Default server address for the Nosto marketing automation service.
+	 * Used on plugin config page.
+	 *
+	 * @since 1.0.0
+	 */
+	const DEFAULT_SERVER_ADDRESS = 'connect.nosto.com';
+
+
+	/**
 	 * Whitelist of product types that are allowed in product tagging.
 	 *
 	 * @since 1.0.0
@@ -682,11 +691,7 @@ class WC_Nosto_Tagging
 	 */
 	public function register_scripts() {
 		if ( ! empty( $this->account_id ) ) {
-			wp_enqueue_script( 'nosto-tagging-script', $this->plugin_url . 'js/embed.js' );
-			$params = array(
-				'accountId' => esc_js( $this->account_id ),
-			);
-			wp_localize_script( 'nosto-tagging-script', 'NostoTagging', $params );
+			wp_enqueue_script( 'nosto-tagging-script', self::get_nosto_embed_src($this->account_id) );
 		}
 	}
 
@@ -939,6 +944,45 @@ class WC_Nosto_Tagging
 		}
 
 		return true;
+	}
+
+	/**
+	 * Returns the arguments of a method
+	 * 
+	 * @param $class
+	 * @param $func_name
+	 * @return array
+	 */
+	public static function get_method_args($class, $func_name) {
+		$reflection = new ReflectionMethod($class, $func_name);
+		$result = array();
+		foreach ($reflection->getParameters() as $param) {
+			$result[] = $param->name;
+		}
+		return $result;
+	}
+
+	/**
+	 * Returns the url for Nosto script
+	 *
+	 * @param string $account_id
+	 * @return string
+	 */
+	public static function get_nosto_embed_src($account_id) {
+		return sprintf(
+			'//%s/include/%s',
+			self::get_nosto_server_address(),
+			$account_id
+		);
+	}
+
+	/**
+	 * Returns the server address for Nosto
+	 *
+	 * @return string
+	 */
+	public static function get_nosto_server_address() {
+		return defined('DEV_NOSTO_SERVER_ADDRESS') ? DEV_NOSTO_SERVER_ADDRESS : self::DEFAULT_NOSTO_SERVER_ADDRESS;
 	}
 }
 
