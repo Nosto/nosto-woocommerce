@@ -1,6 +1,7 @@
 {
   "name": "nosto/nosto-for-woocommerce",
   "description": "Nosto plugin for WooCommerce",
+  "type": "wordpress-plugin",
   "license": "BSD-3-Clause",
   "require-dev": {
     "phing/phing": "2.*"
