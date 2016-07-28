@@ -80,6 +80,21 @@ class WC_Nosto_Tagging
 	 */
 	private static $instance = null;
 
+	/*
+	 * Variation product type
+	 */
+	const PRODUCT_TYPE_VARIATION = 'variable';
+
+	/*
+	 * Variation product type
+	 */
+	const PRODUCT_TYPE_SIMPLE = 'simple';
+
+	/*
+	 * Variation product type
+	 */
+	const PRODUCT_TYPE_GROUPED = 'grouped';
+
 	/**
 	 * Whitelist of product types that are allowed in product tagging.
 	 *
@@ -87,9 +102,9 @@ class WC_Nosto_Tagging
 	 * @var array
 	 */
 	protected static $product_type_whitelist = array(
-		'simple',
-		'variable',
-		'grouped',
+		self::PRODUCT_TYPE_SIMPLE,
+		self::PRODUCT_TYPE_VARIATION,
+		self::PRODUCT_TYPE_GROUPED,
 	);
 
 	/**
@@ -721,7 +736,9 @@ class WC_Nosto_Tagging
 	 * @return string|int
 	 */
 	protected function get_list_price_including_tax( $product ) {
-		if ( $product instanceof WC_Product ) {
+		if ( $product instanceof WC_Product_Variable ) {
+			$list_price = $product->get_variation_regular_price('min', true);
+		} elseif ( $product instanceof WC_Product ) {
 			if ( $product->is_on_sale() && isset( $product->regular_price ) ) {
 				// If the product is on sale, then we create a new instance of
 				// it to avoid breaking things when we assign it a new price attribute.
