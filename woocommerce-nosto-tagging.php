@@ -4,7 +4,7 @@
 	Plugin URI: http://wordpress.org/extend/plugins/woocommerce-nosto-tagging/
 	Description: Implements the required tagging blocks for using Nosto marketing automation service.
 	Author: Nosto Solutions Ltd
-	Version: 1.0.5
+	Version: 1.0.6
 	License: GPLv2
 */
 
@@ -38,7 +38,7 @@ class WC_Nosto_Tagging
 	 *
 	 * @since 1.0.0
 	 */
-	const VERSION = '1.0.5';
+	const VERSION = '1.0.6';
 
 	/**
 	 * Minimum WordPress version this plugin works with.
@@ -101,7 +101,7 @@ class WC_Nosto_Tagging
 	 *
 	 * @since 1.0.0
 	 */
-	const DEFAULT_SERVER_ADDRESS = 'connect.nosto.com';
+	const DEFAULT_NOSTO_SERVER_ADDRESS = 'connect.nosto.com';
 
 
 	/**

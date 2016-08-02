@@ -67,6 +67,8 @@
             <exclude name="package.json*" />
             <exclude name="composer.*" />
             <exclude name="Gruntfile.js*" />
+            <exclude name="LICENSE" />
+            <exclude name="vendor/**" />
             <exclude name="*.tgz" />
         </patternset>
     </fileset>
