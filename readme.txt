@@ -1,54 +1,59 @@
 === Nosto - Personalization for WooCommerce ===
 Contributors: nosto
-Tags: nosto tagging, woocommerce, e-commerce, ecommerce, personalization, recommendations, 
+Tags: nosto tagging, woocommerce, e-commerce, ecommerce, personalization, recommendations
 Requires at least: 3.5.0
 Tested up to: 4.3.1
 Stable tag: 1.0.6
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Nosto is the easiest way to deliver your customers personalized shopping experiences - wherever they are.
+Deliver your customers personalized shopping experiences, at every touch point, across every device.
 
 == Description ==
 
-Nosto analyzes your customers’ behavior, learning their likes and dislikes and enables you to automatically personalize your product recommendations, triggered emails, pop-ups and facebook ads in real-time, for each individual shopper. The result? Happier customers that buy more.
+Every customer is unique. Are you treating them that way? Nosto analyzes hundreds of thousands of data points across your store in real-time, to help you go beyond the numbers and see the individual. We harnesses big data to build a deep understanding of your every customer in real-time, automatically predicting and delivering the most relevant shopping experiences at every touch point, across every device.
 
-Combining patent-pending world-class technology with a core focus on ease of use, there are no complicated integrations or deep technical know-how required. And with a success-based pricing model that scales with your business, you’ll be up and running in minutes - totally risk free.
+Developed with busy ecommerce professionals and ease of use in mind, Nosto is the most effective way to build and launch personalized marketing campaigns without the need for dedicated IT resources. Nosto ensures your rich data isn't being locked away in silos, but can be accessed and utilised efficiently through one complete personalization solution.
 
-We are proud to be trusted by over 10,000 retailers from 100+ countries worldwide.
+We are proud to be trusted by over 20,000 retailers from 150+ countries worldwide including brands like Volcom and FlightClub.
 
-Go live today with 14 days free – no credit card required!
+Get started today with 14 days free – no credit card required!
 
-Features
+**Important note**: Powerful personalization needs a lot of data fuel! For that reason, to really see the benefit of Nosto **you need to stock more than 10 products and have over 1,000 visitors per month.**
 
-Personalized Facebook Ads  
--The fastest, easiest way to deliver personalized advertising to a marketplace of over 1.4 billion people.
+== Features ==
 
-Personalized Product Recommendations  
--Recommend shoppers the most relevant products in real-time based on their unique user behavior.
+### Personalized Facebook Ads
+The fastest, easiest way to deliver personalized advertising to a marketplace of over 1.4 billion people.
 
-Personalized Behavioral Pop-ups  
--Reduce site abandonment and increase conversion with time-limited special offers and one-time discounts.
+### Personalized Product Recommendations
+Recommend shoppers the most relevant products in real-time based on their unique user behavior.
 
-Personalized Triggered Emails  
--Reconnect with your customers through automated, personalized emails.
+### Personalized Behavioral Pop-ups
+Reduce site abandonment and increase conversion with time-limited special offers and one-time discounts.
 
-OK, but why Nosto?
+### Personalized Triggered Emails
+Reconnect with your customers through automated, personalized emails.
 
--Pay only for the sales we help you make  
-We believe it’s important to be fair. That is why we only make money when you do, taking a small % of the revenue we help you generate. No setup costs. No fixed fees. No minimum contract lengths. Learn more about our pricing [here](http://www.nosto.com/pricing/).
+== OK, but why Nosto? ==
 
--Easy to customize, easy to use  
-Nosto makes it easy for you to create and edit recommendations with just a few clicks. With options available for advanced rules and filtering and customizable design, the control is in your hands.
+### One Platform. Infinite Possibilities.
+Nosto’s all-in-one solution allows you to manage all your personalization campaigns from one place. With rich customization options and advanced merchandizing rules we give you full control over which recommendations to display, when, where and to whom. With our advanced API we enable you to extend the power of Nosto’s personalization to even more channels.
 
--1:1 personalization  
-Unlike other services, Nosto delivers tailored recommendations right down to the individual. We know the brands your customers love, the categories they shop and what they’ve bought or browsed in the past. The result? Higher conversion rates for you.
+### Built for marketers. Loved by IT.
+Nosto has been developed with busy ecommerce professionals in mind. Our easy-to-use interface allows you create, launch and optimize multi-channel personalization campaigns in real- time, without the need for IT.
 
--Real-time  
-Nosto’s self-learning recommendation engine works in real-time, detecting product and customer behavior updates as they happen and updating recommendations accordingly, ensuring a smooth, up-to-date and relevant user experience at all times.
+### Continuous learning. Continuous optimization.
+With a rapidly growing community of over 20,000 retailers using Nosto across the globe, we are able to leverage vasts amounts of data to uncover deep insights into what drives successful shopping experiences. Running tests across millions of daily visitors we know which personalization strategies work best for which kind of retailers and are continuously improving our algorithms to improve the performance on your store.
 
--In-depth analytics  
-Nosto’s Admin Panel provides in-depth analytics and reporting tools to help you keep track of your KPIs and how Nosto is helping you reach them. Keep on top of your business, wherever you are.
+### An entire team dedicated to your success
+Our in-house ecommerce experts have worked with thousands of retailers worldwide. Using these learnings we ensure you have the best personalization setup for your store and are continually optimizing for peak performance thereafter.
+
+### Success-based pricing
+Nosto’s pricing scales with your business. No set-up costs. No fixed fees. No minimum contract lengths. We simply take a small % of the revenue we help you generate.
+
+### Fast, easy implementation
+Nosto has completely transformed the way personalization technology integrates with ecommerce stores. Our solution can be added to any site with just a few snippets of code, or a 1-click download of our module, allowing retailers to get up and running with personalization in days rather than months. This is where our patents lie and the reason we’re the fastest-growing personalization solution in the world today.
 
 == Installation ==
 
@@ -63,6 +68,20 @@ name in the list.
 The activation procedure will create a new page called "Top Sellers". This page can be found and edited under the
 "Pages" section in the backend. The page contains a single div element that is used to show product recommendations. A
 link to the page should appear in the shops main navigation menu.
+
+Once you have activated the plugin and added the necessary actions, you need to configure the plugin. The plugins
+configuration page can be found under the "Woocommerce > Settings > Integration".
+
+The configuration page consists of three settings:
+
+* Account name
+	* This is your Nosto marketing automation service account name that you got when registering for the service
+* Use default Nosto elements
+	* This setting controls if the plugin should create and output the default Nosto elements for showing the product
+	recommendations
+	* You can disable the defaults if you want to use your own elements in your theme
+
+All of the above settings are needed for the plugin to work. You do not need to add Nosto javascript manually to your store.
 
 The plugin uses the WordPress Action API to add content to the shop. However, there are a few actions that will have to
 be added to the shops theme in order for the plugin to function to its full extent.
@@ -87,23 +106,6 @@ be added to the shops theme in order for the plugin to function to its full exte
 	* This action should be called at the end of every page in the shop
 	* You need to add `<?php do_action('wcnt_after_main_content'); ?>` in your themes footer template, inside the main
 	content section
-
-Once you have activated the plugin and added the necessary actions, you need to configure the plugin. The plugins
-configuration page can be found under the "Settings->Store" section, in the tab called "Nosto Tagging".
-
-The configuration page consists of three settings:
-
-* Server address
-	* This is the server address for the Nosto marketing automation service
-	* It will have the default value of "connect.nosto.com" and you do not need to change this
-* Account name
-	* This is your Nosto marketing automation service account name that you got when registering for the service
-* Use default Nosto elements
-	* This setting controls if the plugin should create and output the default Nosto elements for showing the product
-	recommendations
-	* You can disable the defaults if you want to use your own elements in your theme
-
-All of the above settings are needed for the plugin to work.
 
 The "Nosto Tagging" widget added by the plugin for showing Nosto elements in the shops sidebars, needs to be configured
 if you wish to use it. The widget can be found under the "Appearance->Widgets" section and it works like any other
@@ -153,3 +155,7 @@ This ID is used as the Nosto element div ID attribute and can be whatever you de
 * Does not support products that are sold only in a group product but NOT individually in the store
 	* A group product consists of multiple simple products and the group is tagged on the product page
 	while the individual simple products in the group are tagged in the cart and order
+
+== Upgrade notice ==
+
+When updating to 1.0.6 please make sure you have not added Nosto javascript manually (or via some plug-in) to your store. Duplicated Nosto script will result in javascript error and your store might became unstable.
