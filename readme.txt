@@ -114,6 +114,9 @@ This ID is used as the Nosto element div ID attribute and can be whatever you de
 
 == Changelog ==
 
+= 1.0.7 =
+* Run the shortcodes for product description
+
 = 1.0.6 =
 * Fix issue with undefined server address
 
