@@ -982,7 +982,13 @@ class WC_Nosto_Tagging
 	 * @return string
 	 */
 	public static function get_nosto_server_address() {
-		return defined('DEV_NOSTO_SERVER_ADDRESS') ? DEV_NOSTO_SERVER_ADDRESS : self::DEFAULT_NOSTO_SERVER_ADDRESS;
+		$server_address = self::DEFAULT_NOSTO_SERVER_ADDRESS; 
+		if (defined('DEV_NOSTO_SERVER_ADDRESS')) {
+			$server_address = DEV_NOSTO_SERVER_ADDRESS;
+		} elseif (isset($_ENV['NOSTO_SERVER_URL'])) {
+			$server_address = $_ENV['NOSTO_SERVER_URL'];
+		}
+		return  $server_address;
 	}
 }
 
