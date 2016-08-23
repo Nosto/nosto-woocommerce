@@ -3,7 +3,7 @@ Contributors: nosto
 Tags: nosto tagging, woocommerce, e-commerce, ecommerce, personalization, recommendations
 Requires at least: 3.5.0
 Tested up to: 4.3.1
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
