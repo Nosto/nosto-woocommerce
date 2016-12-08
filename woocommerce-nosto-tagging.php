@@ -682,20 +682,6 @@ class WC_Nosto_Tagging
 	}
 
 	/**
-	 * Registers the Nosto JavaScript to be added to the page head section.
-	 *
-	 * Both the server address and the account id need to be set for the
-	 * script to be added.
-	 *
-	 * @since 1.0.0
-	 */
-	public function register_scripts() {
-		if ( ! empty( $this->account_id ) ) {
-			wp_enqueue_script( 'nosto-tagging-script', self::get_nosto_embed_src($this->account_id) );
-		}
-	}
-
-	/**
 	 * Registers widget for showing Nosto elements in the shop sidebars.
 	 *
 	 * @since 1.0.0
@@ -853,7 +839,9 @@ class WC_Nosto_Tagging
 	protected function init_frontend() {
 		$this->init_settings();
 
-		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
+        add_action( 'woocommerce_before_single_product', array( $this, 'tag_product' ), 20, 0 );
+        add_action( 'wp_head', array( $this, 'add_nosto_js_stub' ), 10, 0 );
+        add_action( 'wp_head', array( $this, 'add_nosto_js' ), 11, 0 );
 
 		add_action( 'woocommerce_before_single_product', array( $this, 'tag_product' ), 20, 0 );
 		add_action( 'woocommerce_before_main_content', array( $this, 'tag_category' ), 30, 0 );
@@ -990,6 +978,28 @@ class WC_Nosto_Tagging
 		}
 		return  $server_address;
 	}
+
+    /**
+     * Hook callback function for outputting the Nosto include javascript.
+     *
+     * @since 1.1.0
+     */
+    public function add_nosto_js() {
+        if ( ! empty( $this->account_id ) ) {
+            $this->render( 'nosto-js', array( 'server' => self::get_nosto_server_address(), 'account' => $this->account_id ) );
+        }
+    }
+
+    /**
+     * Hook callback function for outputting the Nosto "javascript stub".
+     *
+     * @since 1.1.0
+     */
+    public function add_nosto_js_stub() {
+        if ( ! empty( $this->account_id ) ) {
+            $this->render( 'nosto-js-stub');
+        }
+    }
 }
 
 add_action( 'plugins_loaded', array( WC_Nosto_Tagging::get_instance(), 'init' ) );
