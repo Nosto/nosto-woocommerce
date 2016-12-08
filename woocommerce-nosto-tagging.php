@@ -839,9 +839,9 @@ class WC_Nosto_Tagging
 	protected function init_frontend() {
 		$this->init_settings();
 
-        add_action( 'woocommerce_before_single_product', array( $this, 'tag_product' ), 20, 0 );
-        add_action( 'wp_head', array( $this, 'add_nosto_js_stub' ), 10, 0 );
-        add_action( 'wp_head', array( $this, 'add_nosto_js' ), 11, 0 );
+		add_action( 'woocommerce_before_single_product', array( $this, 'tag_product' ), 20, 0 );
+		add_action( 'wp_head', array( $this, 'add_nosto_js_stub' ), 10, 0 );
+		add_action( 'wp_head', array( $this, 'add_nosto_js' ), 11, 0 );
 
 		add_action( 'woocommerce_before_single_product', array( $this, 'tag_product' ), 20, 0 );
 		add_action( 'woocommerce_before_main_content', array( $this, 'tag_category' ), 30, 0 );
@@ -970,7 +970,7 @@ class WC_Nosto_Tagging
 	 * @return string
 	 */
 	public static function get_nosto_server_address() {
-		$server_address = self::DEFAULT_NOSTO_SERVER_ADDRESS; 
+		$server_address = self::DEFAULT_NOSTO_SERVER_ADDRESS;
 		if (defined('DEV_NOSTO_SERVER_ADDRESS')) {
 			$server_address = DEV_NOSTO_SERVER_ADDRESS;
 		} elseif (isset($_ENV['NOSTO_SERVER_URL'])) {
@@ -979,27 +979,27 @@ class WC_Nosto_Tagging
 		return  $server_address;
 	}
 
-    /**
-     * Hook callback function for outputting the Nosto include javascript.
-     *
-     * @since 1.1.0
-     */
-    public function add_nosto_js() {
-        if ( ! empty( $this->account_id ) ) {
-            $this->render( 'nosto-js', array( 'server' => self::get_nosto_server_address(), 'account' => $this->account_id ) );
-        }
-    }
+	/**
+	 * Hook callback function for outputting the Nosto include javascript.
+	 *
+	 * @since 1.1.0
+	 */
+	public function add_nosto_js() {
+		if ( ! empty( $this->account_id ) ) {
+			$this->render( 'nosto-js', array( 'server' => self::get_nosto_server_address(), 'account' => $this->account_id ) );
+		}
+	}
 
-    /**
-     * Hook callback function for outputting the Nosto "javascript stub".
-     *
-     * @since 1.1.0
-     */
-    public function add_nosto_js_stub() {
-        if ( ! empty( $this->account_id ) ) {
-            $this->render( 'nosto-js-stub');
-        }
-    }
+	/**
+	 * Hook callback function for outputting the Nosto "javascript stub".
+	 *
+	 * @since 1.1.0
+	 */
+	public function add_nosto_js_stub() {
+		if ( ! empty( $this->account_id ) ) {
+			$this->render( 'nosto-js-stub');
+		}
+	}
 }
 
 add_action( 'plugins_loaded', array( WC_Nosto_Tagging::get_instance(), 'init' ) );
