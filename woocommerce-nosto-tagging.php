@@ -54,7 +54,7 @@ class WC_Nosto_Tagging
 	 *
 	 * @since 1.0.0
 	 */
-	const MIN_WC_VERSION = '2.0.0';
+	const MIN_WC_VERSION = '2.6.0';
 
 	/**
 	 * Value for marking a product that is in stock.
