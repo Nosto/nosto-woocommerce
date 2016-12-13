@@ -114,6 +114,36 @@ class WC_Nosto_Tagging
 	const PAGE_TYPE_NOTFOUND = 'notfound';
 	const PAGE_TYPE_ORDER = 'order';
 
+	/**
+	 * Templates
+	 */
+	const TEMPLATE_NOSTO_ELEMENTS = 'nosto-elements';
+	const TEMPLATE_PRODUCT_TAGGING = 'product-tagging';
+	const TEMPLATE_CATEGORY_TAGGING = 'category-tagging';
+	const TEMPLATE_CUSTOMER_TAGGING = 'customer-tagging';
+	const TEMPLATE_CART_TAGGING = 'cart-tagging';
+	const TEMPLATE_ORDER_TAGGING = 'order-tagging';
+
+	/**
+	 * Elements / slots
+	 */
+	const ELEMENT_NOSTO_PAGE_PRODUCT_1 = 'nosto-page-product1';
+	const ELEMENT_NOSTO_PAGE_PRODUCT_2 = 'nosto-page-product2';
+	const ELEMENT_NOSTO_PAGE_PRODUCT_3 = 'nosto-page-product3';
+	const ELEMENT_NOSTO_PAGE_CATEGORY_1 = 'nosto-page-category1';
+	const ELEMENT_NOSTO_PAGE_CATEGORY_2 = 'nosto-page-category2';
+	const ELEMENT_NOSTO_PAGE_CART_1 = 'nosto-page-cart1';
+	const ELEMENT_NOSTO_PAGE_CART_2 = 'nosto-page-cart2';
+	const ELEMENT_NOSTO_PAGE_CART_3 = 'nosto-page-cart3';
+	const ELEMENT_NOSTO_PAGE_SEARCH_1 = 'nosto-page-search1';
+	const ELEMENT_NOSTO_PAGE_SEARCH_2 = 'nosto-page-search2';
+	const ELEMENT_NOSTO_PAGE_TOP = 'nosto-page-top';
+	const ELEMENT_NOSTO_PAGE_BOTTOM = 'nosto-page-bottom';
+	const ELEMENT_FRONTPAGE_NOSTO_1 = 'frontpage-nosto-1';
+	const ELEMENT_FRONTPAGE_NOSTO_2 = 'frontpage-nosto-2';
+	const ELEMENT_NOTFOUND_NOSTO_1 = 'notfound-nosto-1';
+	const ELEMENT_NOTFOUND_NOSTO_2 = 'notfound-nosto-2';
+	const ELEMENT_NOTFOUND_NOSTO_3 = 'notfound-nosto-3';
 
 	/**
 	 * Whitelist of product types that are allowed in product tagging.
@@ -346,7 +376,7 @@ class WC_Nosto_Tagging
 				$data['date_published'] = (string) get_post_time( 'Y-m-d' );
 
 				if ( ! empty( $data ) ) {
-					$this->render( 'product-tagging', array( 'product' => $data ), self::PAGE_TYPE_PRODUCT );
+					$this->render( self::TEMPLATE_PRODUCT_TAGGING, array( 'product' => $data ), self::PAGE_TYPE_PRODUCT );
 				}
 			}
 		}
@@ -364,7 +394,7 @@ class WC_Nosto_Tagging
 			$term          = get_term_by( 'slug', esc_attr( get_query_var( 'product_cat' ) ), 'product_cat' );
 			$category_path = $this->build_category_path( $term );
 			if ( ! empty( $category_path ) ) {
-				$this->render( 'category-tagging', array( 'category_path' => $category_path ), self::PAGE_TYPE_CATEGORY );
+				$this->render( self::TEMPLATE_CATEGORY_TAGGING, array( 'category_path' => $category_path ), self::PAGE_TYPE_CATEGORY );
 			}
 		}
 	}
@@ -381,7 +411,7 @@ class WC_Nosto_Tagging
 			$user     = wp_get_current_user();
 			$customer = $this->get_customer_data( $user );
 			if ( ! empty( $customer ) ) {
-				$this->render( 'customer-tagging', array( 'customer' => $customer ) );
+				$this->render( self::TEMPLATE_CUSTOMER_TAGGING, array( 'customer' => $customer ) );
 			}
 		}
 	}
@@ -419,7 +449,7 @@ class WC_Nosto_Tagging
 			}
 
 			if ( ! empty( $line_items ) ) {
-				$this->render( 'cart-tagging', array( 'line_items' => $line_items ) );
+				$this->render( self::TEMPLATE_CART_TAGGING, array( 'line_items' => $line_items ) );
 			}
 		}
 	}
@@ -521,7 +551,7 @@ class WC_Nosto_Tagging
 					}
 				}
 
-				$this->render( 'order-tagging', array( 'order' => $data ), self::PAGE_TYPE_ORDER );
+				$this->render( self::TEMPLATE_ORDER_TAGGING, array( 'order' => $data ), self::PAGE_TYPE_ORDER );
 			}
 		}
 	}
@@ -534,13 +564,13 @@ class WC_Nosto_Tagging
 	public function add_product_page_bottom_elements() {
 		if ( is_product() ) {
 			$default_element_ids = array(
-				'nosto-page-product1',
-				'nosto-page-product2',
-				'nosto-page-product3',
+				self::ELEMENT_NOSTO_PAGE_PRODUCT_1,
+				self::ELEMENT_NOSTO_PAGE_PRODUCT_2,
+				self::ELEMENT_NOSTO_PAGE_PRODUCT_3,
 			);
 			$element_ids         = apply_filters( 'wcnt_add_product_page_bottom_elements', $default_element_ids );
 			if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-				$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ) );
+				$this->renderElements( $element_ids );
 			}
 		}
 	}
@@ -553,11 +583,11 @@ class WC_Nosto_Tagging
 	public function add_category_page_top_elements() {
 		if ( is_product_category() ) {
 			$default_element_ids = array(
-				'nosto-page-category1',
+				self::ELEMENT_NOSTO_PAGE_CATEGORY_1,
 			);
 			$element_ids         = apply_filters( 'wcnt_add_category_page_top_elements', $default_element_ids );
 			if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-				$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ) );
+				$this->renderElements( $element_ids );
 			}
 		}
 	}
@@ -570,11 +600,11 @@ class WC_Nosto_Tagging
 	public function add_category_page_bottom_elements() {
 		if ( is_product_category() ) {
 			$default_element_ids = array(
-				'nosto-page-category2',
+				self::ELEMENT_NOSTO_PAGE_CATEGORY_2,
 			);
 			$element_ids         = apply_filters( 'wcnt_add_category_page_bottom_elements', $default_element_ids );
 			if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-				$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ) );
+				$this->renderElements( $element_ids );
 			}
 		}
 	}
@@ -587,13 +617,13 @@ class WC_Nosto_Tagging
 	public function add_cart_page_bottom_elements() {
 		if ( is_cart() ) {
 			$default_element_ids = array(
-				'nosto-page-cart1',
-				'nosto-page-cart2',
-				'nosto-page-cart3',
+				self::ELEMENT_NOSTO_PAGE_CART_1,
+				self::ELEMENT_NOSTO_PAGE_CART_2,
+				self::ELEMENT_NOSTO_PAGE_CART_3,
 			);
 			$element_ids         = apply_filters( 'wcnt_add_cart_page_bottom_elements', $default_element_ids );
 			if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-				$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ), self::PAGE_TYPE_CART );
+				$this->renderElements( $element_ids, self::PAGE_TYPE_CART );
 			}
 		}
 	}
@@ -606,11 +636,11 @@ class WC_Nosto_Tagging
 	public function add_search_page_top_elements() {
 		if ( is_search() ) {
 			$default_element_ids = array(
-				'nosto-page-search1',
+				self::ELEMENT_NOSTO_PAGE_SEARCH_1,
 			);
 			$element_ids         = apply_filters( 'wcnt_add_search_page_top_elements', $default_element_ids );
 			if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-				$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ), self::PAGE_TYPE_SEARCH );
+				$this->renderElements( $element_ids, self::PAGE_TYPE_SEARCH );
 			}
 		}
 	}
@@ -623,11 +653,11 @@ class WC_Nosto_Tagging
 	public function add_search_page_bottom_elements() {
 		if ( is_search() ) {
 			$default_element_ids = array(
-				'nosto-page-search2',
+				self::ELEMENT_NOSTO_PAGE_SEARCH_2,
 			);
 			$element_ids         = apply_filters( 'wcnt_add_search_page_bottom_elements', $default_element_ids );
 			if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-				$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ) );
+				$this->renderElements( $element_ids );
 			}
 		}
 	}
@@ -639,11 +669,11 @@ class WC_Nosto_Tagging
 	 */
 	public function add_page_top_elements() {
 		$default_element_ids = array(
-			'nosto-page-top',
+			self::ELEMENT_NOSTO_PAGE_TOP,
 		);
 		$element_ids         = apply_filters( 'wcnt_add_page_top_elements', $default_element_ids );
 		if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-			$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ) );
+			$this->renderElements( $element_ids );
 		}
 	}
 
@@ -654,11 +684,11 @@ class WC_Nosto_Tagging
 	 */
 	public function add_page_bottom_elements() {
 		$default_element_ids = array(
-			'nosto-page-bottom',
+			self::ELEMENT_NOSTO_PAGE_BOTTOM,
 		);
 		$element_ids = apply_filters( 'wcnt_add_page_bottom_elements', $default_element_ids );
 		if ( is_array( $element_ids ) && !empty( $element_ids ) ) {
-			$this->render( 'nosto-elements', array('element_ids' => $element_ids) );
+			$this->renderElements( $element_ids );
 		}
 	}
 
@@ -671,11 +701,11 @@ class WC_Nosto_Tagging
 	{
 		if (is_shop()) {
 			$default_element_ids = array(
-				'frontpage-nosto-1',
+				self::ELEMENT_FRONTPAGE_NOSTO_1,
 			);
 			$element_ids = apply_filters('wcnt_add_page_top_elements', $default_element_ids);
 			if ( is_array( $element_ids ) && !empty( $element_ids ) ) {
-				$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ), self::PAGE_TYPE_FRONT_PAGE );
+				$this->renderElements( $element_ids, self::PAGE_TYPE_FRONT_PAGE );
 			}
 		}
 	}
@@ -689,11 +719,11 @@ class WC_Nosto_Tagging
 	{
 		if (is_shop()) {
 			$default_element_ids = array(
-				'frontpage-nosto-2',
+				self::ELEMENT_FRONTPAGE_NOSTO_2,
 			);
 			$element_ids = apply_filters( 'wcnt_add_page_bottom_elements', $default_element_ids );
 			if ( is_array( $element_ids ) && !empty( $element_ids ) ) {
-				$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ) );
+				$this->renderElements( $element_ids );
 			}
 		}
 	}
@@ -706,11 +736,11 @@ class WC_Nosto_Tagging
 	public function add_notfoundpage_elements()
 	{
 		$default_element_ids = array(
-			'notfound-nosto-1',
-			'notfound-nosto-2',
-			'notfound-nosto-3',
+			self::ELEMENT_NOTFOUND_NOSTO_1,
+			self::ELEMENT_NOTFOUND_NOSTO_2,
+			self::ELEMENT_NOTFOUND_NOSTO_3,
 		);
-		$this->render( 'nosto-elements', array( 'element_ids' => $default_element_ids ), self::PAGE_TYPE_NOTFOUND );
+		$this->renderElements( $default_element_ids, self::PAGE_TYPE_NOTFOUND );
 	}
 
 	/**
@@ -731,6 +761,16 @@ class WC_Nosto_Tagging
 		if ( !empty( $page_type ) ) {
 			require( $this->plugin_dir . 'templates/page-type.php');
 		}
+	}
+
+	/**
+	 * Renders Nosto slots / elements
+	 *
+	 * @param $element_ids
+	 * @param null $page_type
+	 */
+	public function renderElements( $element_ids, $page_type = null ) {
+		$this->render( self::TEMPLATE_NOSTO_ELEMENTS, array( 'element_ids' => $element_ids ), $page_type );
 	}
 
 	/**
@@ -943,7 +983,7 @@ class WC_Nosto_Tagging
 	}
 
 	/**
-	 * /**
+	 *
 	 * Loads the plugin settings from WP options table.
 	 *
 	 * Applies the settings as member variables to $this.
@@ -1037,10 +1077,10 @@ class WC_Nosto_Tagging
 	public function add_homepage_elements() {
 		if ( is_shop() ) {
 			$default_element_ids = array(
-				'frontpage-nosto-1',
-				'frontpage-nosto-2',
+				self::ELEMENT_FRONTPAGE_NOSTO_1,
+				self::ELEMENT_FRONTPAGE_NOSTO_2,
 			);
-			$this->render( 'nosto-elements', array( 'element_ids' => $default_element_ids ), self::PAGE_TYPE_FRONT_PAGE );
+			$this->renderElements( $default_element_ids, self::PAGE_TYPE_FRONT_PAGE );
 		}
 	}
 
@@ -1052,11 +1092,11 @@ class WC_Nosto_Tagging
 	public function add_notfound_elements() {
 		if ( is_404() ) {
 			$default_element_ids = array(
-				'notfound-nosto-1',
-				'notfound-nosto-2',
-				'notfound-nosto-3',
+				self::ELEMENT_NOTFOUND_NOSTO_1,
+				self::ELEMENT_NOTFOUND_NOSTO_2,
+				self::ELEMENT_NOTFOUND_NOSTO_3,
 			);
-			$this->render( 'nosto-elements', array( 'element_ids' => $default_element_ids ), self::PAGE_TYPE_FRONT_PAGE );
+			$this->renderElements( $default_element_ids, self::PAGE_TYPE_FRONT_PAGE );
 		}
 	}
 
