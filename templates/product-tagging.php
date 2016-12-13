@@ -30,8 +30,5 @@
 		<?php if ( ! empty( $product['description'] ) ): ?>
 			<span class="description"><?php echo do_shortcode( $product['description'] ); ?></span>
 		<?php endif; ?>
-		<?php if ( ! empty( $product['date_published'] ) ): ?>
-			<span class="date_published"><?php echo esc_html( $product['date_published'] ); ?></span>
-		<?php endif; ?>
 	</div>
 <?php endif; ?>
