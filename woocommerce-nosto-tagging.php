@@ -38,7 +38,7 @@ class WC_Nosto_Tagging
 	 *
 	 * @since 1.0.0
 	 */
-	const VERSION = '1.0.7';
+	const VERSION = '1.1.0';
 
 	/**
 	 * Minimum WordPress version this plugin works with.
@@ -102,6 +102,17 @@ class WC_Nosto_Tagging
 	 * @since 1.0.0
 	 */
 	const DEFAULT_NOSTO_SERVER_ADDRESS = 'connect.nosto.com';
+
+	/**
+	 * Nosto page types
+	 */
+	const PAGE_TYPE_FRONT_PAGE = 'front';
+	const PAGE_TYPE_CART = 'cart';
+	const PAGE_TYPE_PRODUCT = 'product';
+	const PAGE_TYPE_CATEGORY = 'category';
+	const PAGE_TYPE_SEARCH = 'search';
+	const PAGE_TYPE_NOTFOUND = 'notfound';
+	const PAGE_TYPE_ORDER = 'order';
 
 
 	/**
@@ -335,7 +346,7 @@ class WC_Nosto_Tagging
 				$data['date_published'] = (string) get_post_time( 'Y-m-d' );
 
 				if ( ! empty( $data ) ) {
-					$this->render( 'product-tagging', array( 'product' => $data ) );
+					$this->render( 'product-tagging', array( 'product' => $data ), self::PAGE_TYPE_PRODUCT );
 				}
 			}
 		}
@@ -353,7 +364,7 @@ class WC_Nosto_Tagging
 			$term          = get_term_by( 'slug', esc_attr( get_query_var( 'product_cat' ) ), 'product_cat' );
 			$category_path = $this->build_category_path( $term );
 			if ( ! empty( $category_path ) ) {
-				$this->render( 'category-tagging', array( 'category_path' => $category_path ) );
+				$this->render( 'category-tagging', array( 'category_path' => $category_path ), self::PAGE_TYPE_CATEGORY );
 			}
 		}
 	}
@@ -510,7 +521,7 @@ class WC_Nosto_Tagging
 					}
 				}
 
-				$this->render( 'order-tagging', array( 'order' => $data ) );
+				$this->render( 'order-tagging', array( 'order' => $data ), self::PAGE_TYPE_ORDER );
 			}
 		}
 	}
@@ -582,7 +593,7 @@ class WC_Nosto_Tagging
 			);
 			$element_ids         = apply_filters( 'wcnt_add_cart_page_bottom_elements', $default_element_ids );
 			if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-				$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ) );
+				$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ), self::PAGE_TYPE_CART );
 			}
 		}
 	}
@@ -599,7 +610,7 @@ class WC_Nosto_Tagging
 			);
 			$element_ids         = apply_filters( 'wcnt_add_search_page_top_elements', $default_element_ids );
 			if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-				$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ) );
+				$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ), self::PAGE_TYPE_SEARCH );
 			}
 		}
 	}
@@ -645,10 +656,61 @@ class WC_Nosto_Tagging
 		$default_element_ids = array(
 			'nosto-page-bottom',
 		);
-		$element_ids         = apply_filters( 'wcnt_add_page_bottom_elements', $default_element_ids );
-		if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-			$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ) );
+		$element_ids = apply_filters( 'wcnt_add_page_bottom_elements', $default_element_ids );
+		if ( is_array( $element_ids ) && !empty( $element_ids ) ) {
+			$this->render( 'nosto-elements', array('element_ids' => $element_ids) );
 		}
+	}
+
+	/**
+	 * Add top slots to home page
+	 *
+	 * @return array
+	 */
+	public function add_homepage_top_elements()
+	{
+		if (is_shop()) {
+			$default_element_ids = array(
+				'frontpage-nosto-1',
+			);
+			$element_ids = apply_filters('wcnt_add_page_top_elements', $default_element_ids);
+			if ( is_array( $element_ids ) && !empty( $element_ids ) ) {
+				$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ), self::PAGE_TYPE_FRONT_PAGE );
+			}
+		}
+	}
+
+	/**
+	 * Add bottom slots to home page
+	 *
+	 * @return array
+	 */
+	public function add_homepage_bottom_elements()
+	{
+		if (is_shop()) {
+			$default_element_ids = array(
+				'frontpage-nosto-2',
+			);
+			$element_ids = apply_filters( 'wcnt_add_page_bottom_elements', $default_element_ids );
+			if ( is_array( $element_ids ) && !empty( $element_ids ) ) {
+				$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ) );
+			}
+		}
+	}
+
+	/**
+	 * Add slots to 404 page
+	 *
+	 * @return array
+	 */
+	public function add_notfoundpage_elements()
+	{
+		$default_element_ids = array(
+			'notfound-nosto-1',
+			'notfound-nosto-2',
+			'notfound-nosto-3',
+		);
+		$this->render( 'nosto-elements', array( 'element_ids' => $default_element_ids ), self::PAGE_TYPE_NOTFOUND );
 	}
 
 	/**
@@ -658,14 +720,17 @@ class WC_Nosto_Tagging
 	 *
 	 * @since 1.0.0
 	 * @param string $template The name of the template
-	 * @param array  $data     The data to pass to the template file
+	 * @param array $data The data to pass to the template file
 	 */
-	public function render( $template, $data = array() ) {
+	public function render( $template, $data = array(), $page_type=null ) {
 		if ( is_array( $data ) ) {
 			extract( $data );
 		}
 		$file = $template . '.php';
 		require( $this->plugin_dir . 'templates/' . $file );
+		if ( !empty( $page_type ) ) {
+			require( $this->plugin_dir . 'templates/page-type.php');
+		}
 	}
 
 	/**
@@ -850,44 +915,51 @@ class WC_Nosto_Tagging
 	 *
 	 * @since 1.0.0
 	 */
-	protected function init_frontend() {
+	protected function init_frontend()
+	{
 		$this->init_settings();
 
-		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
+		add_action('wp_enqueue_scripts', array($this, 'register_scripts'));
 
-		add_action( 'woocommerce_before_single_product', array( $this, 'tag_product' ), 20, 0 );
-		add_action( 'woocommerce_before_main_content', array( $this, 'tag_category' ), 30, 0 );
-		add_action( 'woocommerce_thankyou', array( $this, 'tag_order' ), 10, 1 );
-		add_action( 'wp_footer', array( $this, 'tag_customer' ), 10, 0 );
-		add_action( 'wp_footer', array( $this, 'tag_cart' ), 10, 0 );
+		add_action('woocommerce_before_single_product', array($this, 'tag_product'), 20, 0);
+		add_action('woocommerce_before_main_content', array($this, 'tag_category'), 30, 0);
+		add_action('woocommerce_thankyou', array($this, 'tag_order'), 10, 1);
+		add_action('wp_footer', array($this, 'tag_customer'), 10, 0);
+		add_action('wp_footer', array($this, 'tag_cart'), 10, 0);
 
-		if ( (bool) $this->use_default_elements ) {
-			add_action( 'woocommerce_after_single_product_summary', array( $this, 'add_product_page_bottom_elements' ), 30, 0 );
-			add_action( 'woocommerce_before_main_content', array( $this, 'add_category_page_top_elements' ), 40, 0 );
-			add_action( 'woocommerce_after_main_content', array( $this, 'add_category_page_bottom_elements' ), 5, 0 );
-			add_action( 'woocommerce_after_cart', array( $this, 'add_cart_page_bottom_elements' ), 10, 0 );
-			add_action( 'woocommerce_before_main_content', array( $this, 'add_search_page_top_elements' ), 30, 0 );
-			add_action( 'woocommerce_after_main_content', array( $this, 'add_search_page_bottom_elements' ), 5, 0 );
+		if ((bool)$this->use_default_elements) {
+			add_action('woocommerce_after_single_product_summary', array($this, 'add_product_page_bottom_elements'), 30, 0);
+			add_action('woocommerce_before_main_content', array($this, 'add_category_page_top_elements'), 40, 0);
+			add_action('woocommerce_after_main_content', array($this, 'add_category_page_bottom_elements'), 5, 0);
+			add_action('woocommerce_after_cart', array($this, 'add_cart_page_bottom_elements'), 10, 0);
+			add_action('woocommerce_before_main_content', array($this, 'add_search_page_top_elements'), 30, 0);
+			add_action('woocommerce_after_main_content', array($this, 'add_search_page_bottom_elements'), 5, 0);
+			add_action('woocommerce_before_main_content', array($this, 'add_homepage_top_elements'), 30, 0);
+			add_action('woocommerce_after_main_content', array($this, 'add_homepage_bottom_elements'), 5, 0);
+
 			// Custom hooks
-			add_action( 'wcnt_before_search_result', array( $this, 'add_search_page_top_elements' ), 10, 0 );
-			add_action( 'wcnt_after_search_result', array( $this, 'add_search_page_bottom_elements' ), 10, 0 );
-			add_action( 'wcnt_before_main_content', array( $this, 'add_page_top_elements' ), 10, 0 );
-			add_action( 'wcnt_after_main_content', array( $this, 'add_page_bottom_elements' ), 10, 0 );
+			add_action('wcnt_before_search_result', array($this, 'add_search_page_top_elements'), 10, 0);
+			add_action('wcnt_after_search_result', array($this, 'add_search_page_bottom_elements'), 10, 0);
+			add_action('wcnt_notfound_content', array($this, 'add_notfoundpage_elements'), 10, 0);
+			add_action('wcnt_before_main_content', array($this, 'add_page_top_elements'), 10, 0);
+			add_action('wcnt_after_main_content', array($this, 'add_page_bottom_elements'), 10, 0);
 		}
 	}
 
 	/**
+	 * /**
 	 * Loads the plugin settings from WP options table.
 	 *
 	 * Applies the settings as member variables to $this.
 	 *
 	 * @since 1.0.0
 	 */
-	protected function init_settings() {
-		$settings = get_option( 'woocommerce_nosto_tagging_settings' );
-		if ( is_array( $settings ) ) {
-			foreach ( $settings as $key => $value ) {
-				if ( isset( $this->$key ) ) {
+	protected function init_settings()
+	{
+		$settings = get_option('woocommerce_nosto_tagging_settings');
+		if (is_array($settings)) {
+			foreach ($settings as $key => $value) {
+				if (isset($this->$key)) {
 					$this->$key = $value;
 				}
 			}
@@ -948,7 +1020,7 @@ class WC_Nosto_Tagging
 
 	/**
 	 * Returns the arguments of a method
-	 * 
+	 *
 	 * @param $class
 	 * @param $func_name
 	 * @return array
@@ -960,6 +1032,37 @@ class WC_Nosto_Tagging
 			$result[] = $param->name;
 		}
 		return $result;
+	}
+
+	/**
+	 * Add slots to home page
+	 *
+	 * @return array
+	 */
+	public function add_homepage_elements() {
+		if ( is_shop() ) {
+			$default_element_ids = array(
+				'frontpage-nosto-1',
+				'frontpage-nosto-2',
+			);
+			$this->render( 'nosto-elements', array( 'element_ids' => $default_element_ids ), self::PAGE_TYPE_FRONT_PAGE );
+		}
+	}
+
+	/**
+	 * Add slots to 404 page
+	 *
+	 * @return array
+	 */
+	public function add_notfound_elements() {
+		if ( is_404() ) {
+			$default_element_ids = array(
+				'notfound-nosto-1',
+				'notfound-nosto-2',
+				'notfound-nosto-3',
+			);
+			$this->render( 'nosto-elements', array( 'element_ids' => $default_element_ids ), self::PAGE_TYPE_FRONT_PAGE );
+		}
 	}
 
 	/**
@@ -982,7 +1085,7 @@ class WC_Nosto_Tagging
 	 * @return string
 	 */
 	public static function get_nosto_server_address() {
-		$server_address = self::DEFAULT_NOSTO_SERVER_ADDRESS; 
+		$server_address = self::DEFAULT_NOSTO_SERVER_ADDRESS;
 		if (defined('DEV_NOSTO_SERVER_ADDRESS')) {
 			$server_address = DEV_NOSTO_SERVER_ADDRESS;
 		} elseif (isset($_ENV['NOSTO_SERVER_URL'])) {
