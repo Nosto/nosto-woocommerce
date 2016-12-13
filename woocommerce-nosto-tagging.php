@@ -332,7 +332,6 @@ class WC_Nosto_Tagging
 
 				$data['description']    = (string) $product->post->post_content;
 				$data['list_price']     = $this->format_price( $this->get_list_price_including_tax( $product ) );
-				$data['date_published'] = (string) get_post_time( 'Y-m-d' );
 
 				if ( ! empty( $data ) ) {
 					$this->render( 'product-tagging', array( 'product' => $data ) );
