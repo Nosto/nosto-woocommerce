@@ -569,9 +569,7 @@ class WC_Nosto_Tagging
 				self::ELEMENT_NOSTO_PAGE_PRODUCT_3,
 			);
 			$element_ids         = apply_filters( 'wcnt_add_product_page_bottom_elements', $default_element_ids );
-			if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-				$this->renderElements( $element_ids );
-			}
+			$this->renderElements( $element_ids );
 		}
 	}
 
@@ -586,9 +584,7 @@ class WC_Nosto_Tagging
 				self::ELEMENT_NOSTO_PAGE_CATEGORY_1,
 			);
 			$element_ids         = apply_filters( 'wcnt_add_category_page_top_elements', $default_element_ids );
-			if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-				$this->renderElements( $element_ids );
-			}
+			$this->renderElements( $element_ids );
 		}
 	}
 
@@ -603,9 +599,7 @@ class WC_Nosto_Tagging
 				self::ELEMENT_NOSTO_PAGE_CATEGORY_2,
 			);
 			$element_ids         = apply_filters( 'wcnt_add_category_page_bottom_elements', $default_element_ids );
-			if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-				$this->renderElements( $element_ids );
-			}
+			$this->renderElements( $element_ids );
 		}
 	}
 
@@ -622,9 +616,7 @@ class WC_Nosto_Tagging
 				self::ELEMENT_NOSTO_PAGE_CART_3,
 			);
 			$element_ids         = apply_filters( 'wcnt_add_cart_page_bottom_elements', $default_element_ids );
-			if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-				$this->renderElements( $element_ids, self::PAGE_TYPE_CART );
-			}
+			$this->renderElements( $element_ids, self::PAGE_TYPE_CART );
 		}
 	}
 
@@ -639,9 +631,7 @@ class WC_Nosto_Tagging
 				self::ELEMENT_NOSTO_PAGE_SEARCH_1,
 			);
 			$element_ids         = apply_filters( 'wcnt_add_search_page_top_elements', $default_element_ids );
-			if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-				$this->renderElements( $element_ids, self::PAGE_TYPE_SEARCH );
-			}
+			$this->renderElements( $element_ids, self::PAGE_TYPE_SEARCH );
 		}
 	}
 
@@ -656,9 +646,7 @@ class WC_Nosto_Tagging
 				self::ELEMENT_NOSTO_PAGE_SEARCH_2,
 			);
 			$element_ids         = apply_filters( 'wcnt_add_search_page_bottom_elements', $default_element_ids );
-			if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-				$this->renderElements( $element_ids );
-			}
+			$this->renderElements( $element_ids );
 		}
 	}
 
@@ -672,9 +660,7 @@ class WC_Nosto_Tagging
 			self::ELEMENT_NOSTO_PAGE_TOP,
 		);
 		$element_ids         = apply_filters( 'wcnt_add_page_top_elements', $default_element_ids );
-		if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-			$this->renderElements( $element_ids );
-		}
+		$this->renderElements( $element_ids );
 	}
 
 	/**
@@ -687,9 +673,7 @@ class WC_Nosto_Tagging
 			self::ELEMENT_NOSTO_PAGE_BOTTOM,
 		);
 		$element_ids = apply_filters( 'wcnt_add_page_bottom_elements', $default_element_ids );
-		if ( is_array( $element_ids ) && !empty( $element_ids ) ) {
-			$this->renderElements( $element_ids );
-		}
+		$this->renderElements( $element_ids );
 	}
 
 	/**
@@ -704,9 +688,7 @@ class WC_Nosto_Tagging
 				self::ELEMENT_FRONTPAGE_NOSTO_1,
 			);
 			$element_ids = apply_filters('wcnt_add_page_top_elements', $default_element_ids);
-			if ( is_array( $element_ids ) && !empty( $element_ids ) ) {
-				$this->renderElements( $element_ids, self::PAGE_TYPE_FRONT_PAGE );
-			}
+			$this->renderElements( $element_ids, self::PAGE_TYPE_FRONT_PAGE );
 		}
 	}
 
@@ -722,9 +704,7 @@ class WC_Nosto_Tagging
 				self::ELEMENT_FRONTPAGE_NOSTO_2,
 			);
 			$element_ids = apply_filters( 'wcnt_add_page_bottom_elements', $default_element_ids );
-			if ( is_array( $element_ids ) && !empty( $element_ids ) ) {
-				$this->renderElements( $element_ids );
-			}
+			$this->renderElements( $element_ids );
 		}
 	}
 
@@ -769,8 +749,10 @@ class WC_Nosto_Tagging
 	 * @param $element_ids
 	 * @param null $page_type
 	 */
-	public function renderElements( $element_ids, $page_type = null ) {
-		$this->render( self::TEMPLATE_NOSTO_ELEMENTS, array( 'element_ids' => $element_ids ), $page_type );
+	public function renderElements( $element_ids = array(), $page_type = null ) {
+		if ( is_array($element_ids) && count($element_ids) > 0 ) {
+			$this->render( self::TEMPLATE_NOSTO_ELEMENTS, array( 'element_ids' => $element_ids ), $page_type );
+		}
 	}
 
 	/**
