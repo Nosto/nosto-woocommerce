@@ -161,6 +161,7 @@ class WC_Integration_Nosto_Tagging extends WC_Integration
 	 *
 	 * @since 1.0.0
 	 * @param string $key The name of the field as defined in init_form_fields()
+	 * @param  string|null $value Posted Value
 	 * @return string
 	 */
 	public function validate_text_field( $key, $value ) {
