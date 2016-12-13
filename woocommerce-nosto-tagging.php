@@ -141,6 +141,8 @@ class WC_Nosto_Tagging
 	const ELEMENT_NOSTO_PAGE_BOTTOM = 'nosto-page-bottom';
 	const ELEMENT_FRONTPAGE_NOSTO_1 = 'frontpage-nosto-1';
 	const ELEMENT_FRONTPAGE_NOSTO_2 = 'frontpage-nosto-2';
+	const ELEMENT_FRONTPAGE_NOSTO_3 = 'frontpage-nosto-3';
+	const ELEMENT_FRONTPAGE_NOSTO_4 = 'frontpage-nosto-4';
 	const ELEMENT_NOTFOUND_NOSTO_1 = 'notfound-nosto-1';
 	const ELEMENT_NOTFOUND_NOSTO_2 = 'notfound-nosto-2';
 	const ELEMENT_NOTFOUND_NOSTO_3 = 'notfound-nosto-3';
@@ -686,6 +688,7 @@ class WC_Nosto_Tagging
 		if (is_shop()) {
 			$default_element_ids = array(
 				self::ELEMENT_FRONTPAGE_NOSTO_1,
+				self::ELEMENT_FRONTPAGE_NOSTO_2,
 			);
 			$element_ids = apply_filters('wcnt_add_page_top_elements', $default_element_ids);
 			$this->renderElements( $element_ids, self::PAGE_TYPE_FRONT_PAGE );
@@ -701,7 +704,8 @@ class WC_Nosto_Tagging
 	{
 		if (is_shop()) {
 			$default_element_ids = array(
-				self::ELEMENT_FRONTPAGE_NOSTO_2,
+				self::ELEMENT_FRONTPAGE_NOSTO_3,
+				self::ELEMENT_FRONTPAGE_NOSTO_4,
 			);
 			$element_ids = apply_filters( 'wcnt_add_page_bottom_elements', $default_element_ids );
 			$this->renderElements( $element_ids );
@@ -1048,21 +1052,6 @@ class WC_Nosto_Tagging
 			$result[] = $param->name;
 		}
 		return $result;
-	}
-
-	/**
-	 * Add slots to home page
-	 *
-	 * @return array
-	 */
-	public function add_homepage_elements() {
-		if ( is_shop() ) {
-			$default_element_ids = array(
-				self::ELEMENT_FRONTPAGE_NOSTO_1,
-				self::ELEMENT_FRONTPAGE_NOSTO_2,
-			);
-			$this->renderElements( $default_element_ids, self::PAGE_TYPE_FRONT_PAGE );
-		}
 	}
 
 	/**
