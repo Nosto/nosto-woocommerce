@@ -937,30 +937,29 @@ class WC_Nosto_Tagging
 	 *
 	 * @since 1.0.0
 	 */
-	protected function init_frontend()
-	{
+	protected function init_frontend() {
 		$this->init_settings();
-		add_action('wp_enqueue_scripts', array($this, 'register_scripts'));
-		add_action('woocommerce_before_single_product', array($this, 'tag_product'), 20, 0);
-		add_action('woocommerce_before_main_content', array($this, 'tag_category'), 30, 0);
-		add_action('woocommerce_thankyou', array($this, 'tag_order'), 10, 1);
-		add_action('wp_footer', array($this, 'tag_customer'), 10, 0);
-		add_action('wp_footer', array($this, 'tag_cart'), 10, 0);
-		if ((bool)$this->use_default_elements) {
-			add_action('woocommerce_after_single_product_summary', array($this, 'add_product_page_bottom_elements'), 30, 0);
-			add_action('woocommerce_before_main_content', array($this, 'add_category_page_top_elements'), 40, 0);
-			add_action('woocommerce_after_main_content', array($this, 'add_category_page_bottom_elements'), 5, 0);
-			add_action('woocommerce_after_cart', array($this, 'add_cart_page_bottom_elements'), 10, 0);
-			add_action('woocommerce_before_main_content', array($this, 'add_search_page_top_elements'), 30, 0);
-			add_action('woocommerce_after_main_content', array($this, 'add_search_page_bottom_elements'), 5, 0);
-			add_action('woocommerce_before_main_content', array($this, 'add_homepage_top_elements'), 30, 0);
-			add_action('woocommerce_after_main_content', array($this, 'add_homepage_bottom_elements'), 5, 0);
+		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
+		add_action( 'woocommerce_before_single_product', array( $this, 'tag_product' ), 20, 0 );
+		add_action( 'woocommerce_before_main_content', array( $this, 'tag_category' ), 30, 0 );
+		add_action( 'woocommerce_thankyou', array( $this, 'tag_order' ), 10, 1 );
+		add_action( 'wp_footer', array( $this, 'tag_customer' ), 10, 0 );
+		add_action( 'wp_footer', array( $this, 'tag_cart' ), 10, 0 );
+		if( (bool)$this->use_default_elements ) {
+			add_action( 'woocommerce_after_single_product_summary', array( $this, 'add_product_page_bottom_elements' ), 30, 0 );
+			add_action( 'woocommerce_before_main_content', array( $this, 'add_category_page_top_elements' ), 40, 0 );
+			add_action( 'woocommerce_after_main_content', array( $this, 'add_category_page_bottom_elements' ), 5, 0 );
+			add_action( 'woocommerce_after_cart', array( $this, 'add_cart_page_bottom_elements' ), 10, 0 );
+			add_action( 'woocommerce_before_main_content', array( $this, 'add_search_page_top_elements' ), 30, 0 );
+			add_action( 'woocommerce_after_main_content', array( $this, 'add_search_page_bottom_elements' ), 5, 0 );
+			add_action( 'woocommerce_before_main_content', array( $this, 'add_homepage_top_elements' ), 30, 0 );
+			add_action( 'woocommerce_after_main_content', array( $this, 'add_homepage_bottom_elements' ), 5, 0 );
 			// Custom hooks
-			add_action('wcnt_before_search_result', array($this, 'add_search_page_top_elements'), 10, 0);
-			add_action('wcnt_after_search_result', array($this, 'add_search_page_bottom_elements'), 10, 0);
-			add_action('wcnt_notfound_content', array($this, 'add_notfoundpage_elements'), 10, 0);
-			add_action('wcnt_before_main_content', array($this, 'add_page_top_elements'), 10, 0);
-			add_action('wcnt_after_main_content', array($this, 'add_page_bottom_elements'), 10, 0);
+			add_action( 'wcnt_before_search_result', array( $this, 'add_search_page_top_elements' ), 10, 0 );
+			add_action( 'wcnt_after_search_result', array( $this, 'add_search_page_bottom_elements' ), 10, 0 );
+			add_action( 'wcnt_notfound_content', array( $this, 'add_notfoundpage_elements' ), 10, 0 );
+			add_action( 'wcnt_before_main_content', array( $this, 'add_page_top_elements' ), 10, 0 );
+			add_action( 'wcnt_after_main_content', array( $this, 'add_page_bottom_elements' ), 10, 0 );
 		}
 	}
 
