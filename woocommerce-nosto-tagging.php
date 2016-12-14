@@ -4,7 +4,7 @@
 	Plugin URI: http://wordpress.org/extend/plugins/woocommerce-nosto-tagging/
 	Description: Implements the required tagging blocks for using Nosto marketing automation service.
 	Author: Nosto Solutions Ltd
-	Version: 1.0.7
+	Version: 1.1.0
 	License: GPLv2
 */
 
@@ -38,7 +38,7 @@ class WC_Nosto_Tagging
 	 *
 	 * @since 1.0.0
 	 */
-	const VERSION = '1.0.7';
+	const VERSION = '1.1.0';
 
 	/**
 	 * Minimum WordPress version this plugin works with.
@@ -54,7 +54,7 @@ class WC_Nosto_Tagging
 	 *
 	 * @since 1.0.0
 	 */
-	const MIN_WC_VERSION = '2.0.0';
+	const MIN_WC_VERSION = '2.6.0';
 
 	/**
 	 * Value for marking a product that is in stock.
@@ -103,6 +103,49 @@ class WC_Nosto_Tagging
 	 */
 	const DEFAULT_NOSTO_SERVER_ADDRESS = 'connect.nosto.com';
 
+	/**
+	 * Nosto page types
+	 */
+	const PAGE_TYPE_FRONT_PAGE = 'front';
+	const PAGE_TYPE_CART = 'cart';
+	const PAGE_TYPE_PRODUCT = 'product';
+	const PAGE_TYPE_CATEGORY = 'category';
+	const PAGE_TYPE_SEARCH = 'search';
+	const PAGE_TYPE_NOTFOUND = 'notfound';
+	const PAGE_TYPE_ORDER = 'order';
+
+	/**
+	 * Templates
+	 */
+	const TEMPLATE_NOSTO_ELEMENTS = 'nosto-elements';
+	const TEMPLATE_PRODUCT_TAGGING = 'product-tagging';
+	const TEMPLATE_CATEGORY_TAGGING = 'category-tagging';
+	const TEMPLATE_CUSTOMER_TAGGING = 'customer-tagging';
+	const TEMPLATE_CART_TAGGING = 'cart-tagging';
+	const TEMPLATE_ORDER_TAGGING = 'order-tagging';
+
+	/**
+	 * Elements / slots
+	 */
+	const ELEMENT_NOSTO_PAGE_PRODUCT_1 = 'nosto-page-product1';
+	const ELEMENT_NOSTO_PAGE_PRODUCT_2 = 'nosto-page-product2';
+	const ELEMENT_NOSTO_PAGE_PRODUCT_3 = 'nosto-page-product3';
+	const ELEMENT_NOSTO_PAGE_CATEGORY_1 = 'nosto-page-category1';
+	const ELEMENT_NOSTO_PAGE_CATEGORY_2 = 'nosto-page-category2';
+	const ELEMENT_NOSTO_PAGE_CART_1 = 'nosto-page-cart1';
+	const ELEMENT_NOSTO_PAGE_CART_2 = 'nosto-page-cart2';
+	const ELEMENT_NOSTO_PAGE_CART_3 = 'nosto-page-cart3';
+	const ELEMENT_NOSTO_PAGE_SEARCH_1 = 'nosto-page-search1';
+	const ELEMENT_NOSTO_PAGE_SEARCH_2 = 'nosto-page-search2';
+	const ELEMENT_NOSTO_PAGE_TOP = 'nosto-page-top';
+	const ELEMENT_NOSTO_PAGE_BOTTOM = 'nosto-page-bottom';
+	const ELEMENT_FRONTPAGE_NOSTO_1 = 'frontpage-nosto-1';
+	const ELEMENT_FRONTPAGE_NOSTO_2 = 'frontpage-nosto-2';
+	const ELEMENT_FRONTPAGE_NOSTO_3 = 'frontpage-nosto-3';
+	const ELEMENT_FRONTPAGE_NOSTO_4 = 'frontpage-nosto-4';
+	const ELEMENT_NOTFOUND_NOSTO_1 = 'notfound-nosto-1';
+	const ELEMENT_NOTFOUND_NOSTO_2 = 'notfound-nosto-2';
+	const ELEMENT_NOTFOUND_NOSTO_3 = 'notfound-nosto-3';
 
 	/**
 	 * Whitelist of product types that are allowed in product tagging.
@@ -332,10 +375,9 @@ class WC_Nosto_Tagging
 
 				$data['description']    = (string) $product->post->post_content;
 				$data['list_price']     = $this->format_price( $this->get_list_price_including_tax( $product ) );
-				$data['date_published'] = (string) get_post_time( 'Y-m-d' );
 
 				if ( ! empty( $data ) ) {
-					$this->render( 'product-tagging', array( 'product' => $data ) );
+					$this->render( self::TEMPLATE_PRODUCT_TAGGING, array( 'product' => $data ), self::PAGE_TYPE_PRODUCT );
 				}
 			}
 		}
@@ -353,7 +395,7 @@ class WC_Nosto_Tagging
 			$term          = get_term_by( 'slug', esc_attr( get_query_var( 'product_cat' ) ), 'product_cat' );
 			$category_path = $this->build_category_path( $term );
 			if ( ! empty( $category_path ) ) {
-				$this->render( 'category-tagging', array( 'category_path' => $category_path ) );
+				$this->render( self::TEMPLATE_CATEGORY_TAGGING, array( 'category_path' => $category_path ), self::PAGE_TYPE_CATEGORY );
 			}
 		}
 	}
@@ -370,7 +412,7 @@ class WC_Nosto_Tagging
 			$user     = wp_get_current_user();
 			$customer = $this->get_customer_data( $user );
 			if ( ! empty( $customer ) ) {
-				$this->render( 'customer-tagging', array( 'customer' => $customer ) );
+				$this->render( self::TEMPLATE_CUSTOMER_TAGGING, array( 'customer' => $customer ) );
 			}
 		}
 	}
@@ -408,7 +450,7 @@ class WC_Nosto_Tagging
 			}
 
 			if ( ! empty( $line_items ) ) {
-				$this->render( 'cart-tagging', array( 'line_items' => $line_items ) );
+				$this->render( self::TEMPLATE_CART_TAGGING, array( 'line_items' => $line_items ) );
 			}
 		}
 	}
@@ -510,7 +552,7 @@ class WC_Nosto_Tagging
 					}
 				}
 
-				$this->render( 'order-tagging', array( 'order' => $data ) );
+				$this->render( self::TEMPLATE_ORDER_TAGGING, array( 'order' => $data ), self::PAGE_TYPE_ORDER );
 			}
 		}
 	}
@@ -523,14 +565,12 @@ class WC_Nosto_Tagging
 	public function add_product_page_bottom_elements() {
 		if ( is_product() ) {
 			$default_element_ids = array(
-				'nosto-page-product1',
-				'nosto-page-product2',
-				'nosto-page-product3',
+				self::ELEMENT_NOSTO_PAGE_PRODUCT_1,
+				self::ELEMENT_NOSTO_PAGE_PRODUCT_2,
+				self::ELEMENT_NOSTO_PAGE_PRODUCT_3,
 			);
 			$element_ids         = apply_filters( 'wcnt_add_product_page_bottom_elements', $default_element_ids );
-			if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-				$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ) );
-			}
+			$this->renderElements( $element_ids );
 		}
 	}
 
@@ -542,12 +582,10 @@ class WC_Nosto_Tagging
 	public function add_category_page_top_elements() {
 		if ( is_product_category() ) {
 			$default_element_ids = array(
-				'nosto-page-category1',
+				self::ELEMENT_NOSTO_PAGE_CATEGORY_1,
 			);
 			$element_ids         = apply_filters( 'wcnt_add_category_page_top_elements', $default_element_ids );
-			if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-				$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ) );
-			}
+			$this->renderElements( $element_ids );
 		}
 	}
 
@@ -559,12 +597,10 @@ class WC_Nosto_Tagging
 	public function add_category_page_bottom_elements() {
 		if ( is_product_category() ) {
 			$default_element_ids = array(
-				'nosto-page-category2',
+				self::ELEMENT_NOSTO_PAGE_CATEGORY_2,
 			);
 			$element_ids         = apply_filters( 'wcnt_add_category_page_bottom_elements', $default_element_ids );
-			if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-				$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ) );
-			}
+			$this->renderElements( $element_ids );
 		}
 	}
 
@@ -576,14 +612,12 @@ class WC_Nosto_Tagging
 	public function add_cart_page_bottom_elements() {
 		if ( is_cart() ) {
 			$default_element_ids = array(
-				'nosto-page-cart1',
-				'nosto-page-cart2',
-				'nosto-page-cart3',
+				self::ELEMENT_NOSTO_PAGE_CART_1,
+				self::ELEMENT_NOSTO_PAGE_CART_2,
+				self::ELEMENT_NOSTO_PAGE_CART_3,
 			);
 			$element_ids         = apply_filters( 'wcnt_add_cart_page_bottom_elements', $default_element_ids );
-			if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-				$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ) );
-			}
+			$this->renderElements( $element_ids, self::PAGE_TYPE_CART );
 		}
 	}
 
@@ -595,12 +629,10 @@ class WC_Nosto_Tagging
 	public function add_search_page_top_elements() {
 		if ( is_search() ) {
 			$default_element_ids = array(
-				'nosto-page-search1',
+				self::ELEMENT_NOSTO_PAGE_SEARCH_1,
 			);
 			$element_ids         = apply_filters( 'wcnt_add_search_page_top_elements', $default_element_ids );
-			if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-				$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ) );
-			}
+			$this->renderElements( $element_ids, self::PAGE_TYPE_SEARCH );
 		}
 	}
 
@@ -612,12 +644,10 @@ class WC_Nosto_Tagging
 	public function add_search_page_bottom_elements() {
 		if ( is_search() ) {
 			$default_element_ids = array(
-				'nosto-page-search2',
+				self::ELEMENT_NOSTO_PAGE_SEARCH_2,
 			);
 			$element_ids         = apply_filters( 'wcnt_add_search_page_bottom_elements', $default_element_ids );
-			if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-				$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ) );
-			}
+			$this->renderElements( $element_ids );
 		}
 	}
 
@@ -628,12 +658,10 @@ class WC_Nosto_Tagging
 	 */
 	public function add_page_top_elements() {
 		$default_element_ids = array(
-			'nosto-page-top',
+			self::ELEMENT_NOSTO_PAGE_TOP,
 		);
 		$element_ids         = apply_filters( 'wcnt_add_page_top_elements', $default_element_ids );
-		if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-			$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ) );
-		}
+		$this->renderElements( $element_ids );
 	}
 
 	/**
@@ -643,12 +671,59 @@ class WC_Nosto_Tagging
 	 */
 	public function add_page_bottom_elements() {
 		$default_element_ids = array(
-			'nosto-page-bottom',
+			self::ELEMENT_NOSTO_PAGE_BOTTOM,
 		);
-		$element_ids         = apply_filters( 'wcnt_add_page_bottom_elements', $default_element_ids );
-		if ( is_array( $element_ids ) && ! empty( $element_ids ) ) {
-			$this->render( 'nosto-elements', array( 'element_ids' => $element_ids ) );
+		$element_ids = apply_filters( 'wcnt_add_page_bottom_elements', $default_element_ids );
+		$this->renderElements( $element_ids );
+	}
+
+	/**
+	 * Add top slots to home page
+	 *
+	 * @return array
+	 */
+	public function add_homepage_top_elements()
+	{
+		if (is_shop()) {
+			$default_element_ids = array(
+				self::ELEMENT_FRONTPAGE_NOSTO_1,
+				self::ELEMENT_FRONTPAGE_NOSTO_2,
+			);
+			$element_ids = apply_filters('wcnt_add_page_top_elements', $default_element_ids);
+			$this->renderElements( $element_ids, self::PAGE_TYPE_FRONT_PAGE );
 		}
+	}
+
+	/**
+	 * Add bottom slots to home page
+	 *
+	 * @return array
+	 */
+	public function add_homepage_bottom_elements()
+	{
+		if (is_shop()) {
+			$default_element_ids = array(
+				self::ELEMENT_FRONTPAGE_NOSTO_3,
+				self::ELEMENT_FRONTPAGE_NOSTO_4,
+			);
+			$element_ids = apply_filters( 'wcnt_add_page_bottom_elements', $default_element_ids );
+			$this->renderElements( $element_ids );
+		}
+	}
+
+	/**
+	 * Add slots to 404 page
+	 *
+	 * @return array
+	 */
+	public function add_notfoundpage_elements()
+	{
+		$default_element_ids = array(
+			self::ELEMENT_NOTFOUND_NOSTO_1,
+			self::ELEMENT_NOTFOUND_NOSTO_2,
+			self::ELEMENT_NOTFOUND_NOSTO_3,
+		);
+		$this->renderElements( $default_element_ids, self::PAGE_TYPE_NOTFOUND );
 	}
 
 	/**
@@ -658,14 +733,29 @@ class WC_Nosto_Tagging
 	 *
 	 * @since 1.0.0
 	 * @param string $template The name of the template
-	 * @param array  $data     The data to pass to the template file
+	 * @param array $data The data to pass to the template file
 	 */
-	public function render( $template, $data = array() ) {
+	public function render( $template, $data = array(), $page_type=null ) {
 		if ( is_array( $data ) ) {
 			extract( $data );
 		}
 		$file = $template . '.php';
 		require( $this->plugin_dir . 'templates/' . $file );
+		if ( !empty( $page_type ) ) {
+			require( $this->plugin_dir . 'templates/page-type.php');
+		}
+	}
+
+	/**
+	 * Renders Nosto slots / elements
+	 *
+	 * @param $element_ids
+	 * @param null $page_type
+	 */
+	public function renderElements( $element_ids = array(), $page_type = null ) {
+		if ( is_array($element_ids) && count($element_ids) > 0 ) {
+			$this->render( self::TEMPLATE_NOSTO_ELEMENTS, array( 'element_ids' => $element_ids ), $page_type );
+		}
 	}
 
 	/**
@@ -679,20 +769,6 @@ class WC_Nosto_Tagging
 	public function load_class( $class_name = '' ) {
 		$file = 'class-' . strtolower( str_replace( '_', '-', $class_name ) ) . '.php';
 		require_once( $this->plugin_dir . 'classes/' . $file );
-	}
-
-	/**
-	 * Registers the Nosto JavaScript to be added to the page head section.
-	 *
-	 * Both the server address and the account id need to be set for the
-	 * script to be added.
-	 *
-	 * @since 1.0.0
-	 */
-	public function register_scripts() {
-		if ( ! empty( $this->account_id ) ) {
-			wp_enqueue_script( 'nosto-tagging-script', self::get_nosto_embed_src($this->account_id) );
-		}
 	}
 
 	/**
@@ -852,31 +928,34 @@ class WC_Nosto_Tagging
 	 */
 	protected function init_frontend() {
 		$this->init_settings();
-
-		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
-
+		add_action( 'woocommerce_before_single_product', array( $this, 'tag_product' ), 20, 0 );
+		add_action( 'wp_head', array( $this, 'add_nosto_js_stub' ), 10, 0 );
+		add_action( 'wp_head', array( $this, 'add_nosto_js' ), 11, 0 );
 		add_action( 'woocommerce_before_single_product', array( $this, 'tag_product' ), 20, 0 );
 		add_action( 'woocommerce_before_main_content', array( $this, 'tag_category' ), 30, 0 );
 		add_action( 'woocommerce_thankyou', array( $this, 'tag_order' ), 10, 1 );
 		add_action( 'wp_footer', array( $this, 'tag_customer' ), 10, 0 );
 		add_action( 'wp_footer', array( $this, 'tag_cart' ), 10, 0 );
-
-		if ( (bool) $this->use_default_elements ) {
+		if( (bool)$this->use_default_elements ) {
 			add_action( 'woocommerce_after_single_product_summary', array( $this, 'add_product_page_bottom_elements' ), 30, 0 );
 			add_action( 'woocommerce_before_main_content', array( $this, 'add_category_page_top_elements' ), 40, 0 );
 			add_action( 'woocommerce_after_main_content', array( $this, 'add_category_page_bottom_elements' ), 5, 0 );
 			add_action( 'woocommerce_after_cart', array( $this, 'add_cart_page_bottom_elements' ), 10, 0 );
 			add_action( 'woocommerce_before_main_content', array( $this, 'add_search_page_top_elements' ), 30, 0 );
 			add_action( 'woocommerce_after_main_content', array( $this, 'add_search_page_bottom_elements' ), 5, 0 );
+			add_action( 'woocommerce_before_main_content', array( $this, 'add_homepage_top_elements' ), 30, 0 );
+			add_action( 'woocommerce_after_main_content', array( $this, 'add_homepage_bottom_elements' ), 5, 0 );
 			// Custom hooks
 			add_action( 'wcnt_before_search_result', array( $this, 'add_search_page_top_elements' ), 10, 0 );
 			add_action( 'wcnt_after_search_result', array( $this, 'add_search_page_bottom_elements' ), 10, 0 );
+			add_action( 'wcnt_notfound_content', array( $this, 'add_notfoundpage_elements' ), 10, 0 );
 			add_action( 'wcnt_before_main_content', array( $this, 'add_page_top_elements' ), 10, 0 );
 			add_action( 'wcnt_after_main_content', array( $this, 'add_page_bottom_elements' ), 10, 0 );
 		}
 	}
 
 	/**
+	 *
 	 * Loads the plugin settings from WP options table.
 	 *
 	 * Applies the settings as member variables to $this.
@@ -885,9 +964,9 @@ class WC_Nosto_Tagging
 	 */
 	protected function init_settings() {
 		$settings = get_option( 'woocommerce_nosto_tagging_settings' );
-		if ( is_array( $settings ) ) {
+		if( is_array( $settings ) ) {
 			foreach ( $settings as $key => $value ) {
-				if ( isset( $this->$key ) ) {
+				if( isset( $this->$key ) ) {
 					$this->$key = $value;
 				}
 			}
@@ -948,7 +1027,7 @@ class WC_Nosto_Tagging
 
 	/**
 	 * Returns the arguments of a method
-	 * 
+	 *
 	 * @param $class
 	 * @param $func_name
 	 * @return array
@@ -960,6 +1039,22 @@ class WC_Nosto_Tagging
 			$result[] = $param->name;
 		}
 		return $result;
+	}
+
+	/**
+	 * Add slots to 404 page
+	 *
+	 * @return array
+	 */
+	public function add_notfound_elements() {
+		if ( is_404() ) {
+			$default_element_ids = array(
+				self::ELEMENT_NOTFOUND_NOSTO_1,
+				self::ELEMENT_NOTFOUND_NOSTO_2,
+				self::ELEMENT_NOTFOUND_NOSTO_3,
+			);
+			$this->renderElements( $default_element_ids, self::PAGE_TYPE_FRONT_PAGE );
+		}
 	}
 
 	/**
@@ -982,13 +1077,35 @@ class WC_Nosto_Tagging
 	 * @return string
 	 */
 	public static function get_nosto_server_address() {
-		$server_address = self::DEFAULT_NOSTO_SERVER_ADDRESS; 
+		$server_address = self::DEFAULT_NOSTO_SERVER_ADDRESS;
 		if (defined('DEV_NOSTO_SERVER_ADDRESS')) {
 			$server_address = DEV_NOSTO_SERVER_ADDRESS;
 		} elseif (isset($_ENV['NOSTO_SERVER_URL'])) {
 			$server_address = $_ENV['NOSTO_SERVER_URL'];
 		}
 		return  $server_address;
+	}
+
+	/**
+	 * Hook callback function for outputting the Nosto include javascript.
+	 *
+	 * @since 1.1.0
+	 */
+	public function add_nosto_js() {
+		if ( ! empty( $this->account_id ) ) {
+			$this->render( 'nosto-js', array( 'server' => self::get_nosto_server_address(), 'account' => $this->account_id ) );
+		}
+	}
+
+	/**
+	 * Hook callback function for outputting the Nosto "javascript stub".
+	 *
+	 * @since 1.1.0
+	 */
+	public function add_nosto_js_stub() {
+		if ( ! empty( $this->account_id ) ) {
+			$this->render( 'nosto-js-stub');
+		}
 	}
 }
 

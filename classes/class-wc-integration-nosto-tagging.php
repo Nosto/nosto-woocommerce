@@ -155,12 +155,16 @@ class WC_Integration_Nosto_Tagging extends WC_Integration
 	 * If proper error handling is needed, we need to move the plugin settings page
 	 * outside the WooCommerce settings structure. Then we can use the WordPress
 	 * Settings API that supports error handling.
+     *
+     * Note that the signature of this method was changed in 1.1.0 to be
+     * compatible with WooCommerce's version 2.6.0
 	 *
 	 * @since 1.0.0
 	 * @param string $key The name of the field as defined in init_form_fields()
+	 * @param  string|null $value Posted Value
 	 * @return string
 	 */
-	public function validate_text_field( $key ) {
+	public function validate_text_field( $key, $value ) {
 
 		// There was a change in Woocommerce 2.6.0 where the logic of validate_text_field changed
 		$method_args = WC_Nosto_Tagging::get_method_args(get_parent_class($this), 'validate_text_field');

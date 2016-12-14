@@ -2,8 +2,8 @@
 Contributors: nosto
 Tags: nosto tagging, woocommerce, e-commerce, ecommerce, personalization, recommendations
 Requires at least: 3.5.0
-Tested up to: 4.3.1
-Stable tag: 1.0.7
+Tested up to: 4.7.0
+Stable tag: 1.1.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,7 +57,7 @@ Nosto has completely transformed the way personalization technology integrates w
 
 == Installation ==
 
-Before proceeding please make sure that you are running WordPress 3.5 or above and WooCommerce 2.0.0 or above.
+Before proceeding please make sure that you are running WordPress 3.5 or above and WooCommerce 2.6.0 or above.
 
 Please refer to the WordPress documentation on how to get the plugin to appear in your installation admin section.
 
@@ -106,6 +106,10 @@ be added to the shops theme in order for the plugin to function to its full exte
 	* This action should be called at the end of every page in the shop
 	* You need to add `<?php do_action('wcnt_after_main_content'); ?>` in your themes footer template, inside the main
 	content section
+* wcnt_notfound_content
+	* This action should be called above the search result list on the on search pages
+	* You need to add `<?php do_action('wcnt_notfound_content'); ?>` in your themes not found page template (404.php) at the
+	appropriate location
 
 The "Nosto Tagging" widget added by the plugin for showing Nosto elements in the shops sidebars, needs to be configured
 if you wish to use it. The widget can be found under the "Appearance->Widgets" section and it works like any other
@@ -113,6 +117,13 @@ WordPress widget. After dropping the widget in the appropriate sidebar container
 This ID is used as the Nosto element div ID attribute and can be whatever you decide.
 
 == Changelog ==
+
+= 1.1.0 =
+* Remove date_published from tagging
+* Add page type tagging
+* Change the signature of validate_text_field to match the parent method
+* Set Nosto script to be included async
+* Introduce "js stub" for Nosto script
 
 = 1.0.7 =
 * Run the shortcodes for product description
