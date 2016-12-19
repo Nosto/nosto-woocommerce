@@ -1,9 +1,9 @@
 === Nosto - Personalization for WooCommerce ===
 Contributors: nosto
 Tags: nosto tagging, woocommerce, e-commerce, ecommerce, personalization, recommendations
-Requires at least: 3.5.0
+Requires at least: 4.4.0
 Tested up to: 4.7.0
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,7 +57,7 @@ Nosto has completely transformed the way personalization technology integrates w
 
 == Installation ==
 
-Before proceeding please make sure that you are running WordPress 3.5 or above and WooCommerce 2.6.0 or above.
+Before proceeding please make sure that you are running WordPress 4.4 or above and WooCommerce 2.6.0 or above.
 
 Please refer to the WordPress documentation on how to get the plugin to appear in your installation admin section.
 
@@ -117,6 +117,10 @@ WordPress widget. After dropping the widget in the appropriate sidebar container
 This ID is used as the Nosto element div ID attribute and can be whatever you decide.
 
 == Changelog ==
+
+= 1.1.1 =
+* Bump the min required Wordpress version
+* Add missing templates to SVN repo
 
 = 1.1.0 =
 * Remove date_published from tagging
