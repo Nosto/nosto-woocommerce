@@ -38,7 +38,7 @@ class WC_Nosto_Tagging
 	 *
 	 * @since 1.0.0
 	 */
-	const VERSION = '1.1.0';
+	const VERSION = '1.1.1';
 
 	/**
 	 * Minimum WordPress version this plugin works with.
@@ -46,7 +46,7 @@ class WC_Nosto_Tagging
 	 *
 	 * @since 1.0.0
 	 */
-	const MIN_WP_VERSION = '3.5';
+	const MIN_WP_VERSION = '4.4';
 
 	/**
 	 * Minimum WooCommerce plugin version this plugin works with.
