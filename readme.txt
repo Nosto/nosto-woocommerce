@@ -119,6 +119,7 @@ This ID is used as the Nosto element div ID attribute and can be whatever you de
 == Changelog ==
 
 = 1.1.1 =
+* Bump the min required Wordpress version
 * Add missing templates to SVN repo
 
 = 1.1.0 =
