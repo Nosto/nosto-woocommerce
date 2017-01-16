@@ -19,7 +19,8 @@ We are proud to be trusted by over 20,000 retailers from 150+ countries worldwid
 
 Get started today with 14 days free – no credit card required!
 
-**Important note**: Powerful personalization needs a lot of data fuel! For that reason, to really see the benefit of Nosto **you need to stock more than 10 products and have over 1,000 visitors per month.**
+**Important note**: Powerful personalization needs a lot of data fuel! For that reason, to really see the benefit of Nosto **you need have over 30,000 visitors per month.**
+
 
 == Features ==
 
